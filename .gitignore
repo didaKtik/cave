@@ -1,0 +1,13 @@
+**/.DS_Store
+docs
+node_modules
+dist
+**/bower_components
+.tmp
+.publish/
+*.md
+app/*images
+app/sounds
+app/test
+app/elements
+**/*.todo
