@@ -11,10 +11,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   'use strict';
 
   // Grab a reference to our auto-binding template
-  // and give it some initial binding values
-  // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
-
-  // So app is just the auto-binding template at first
   var app = document.querySelector('#app');
 
   // Sets app default base URL
@@ -22,7 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   if (window.location.port === '') {  // if production
     // Uncomment app.baseURL below and
     // set app.baseURL to '/your-pathname/' if running from folder in production
-    // app.baseUrl = '/polymer-starter-kit/';
+    app.baseUrl = '/cave/';
   }
 
   app.displayInstalledToast = function() {
@@ -42,11 +38,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // Trigger when imports are loaded and elements have been registered
   window.addEventListener('WebComponentsReady', function() {
     // toggle fixed header based on screen size
+    // Broken since there are selectable neon-pages in the main panel
     var panel = app.$.headerPanelMain;
     var mquery = app.$.mquery;
     mquery.addEventListener('query-matches-changed', function() {
       panel.fixed = mquery.queryMatches;
     });
+    console.log(mquery.queryMatches);
     panel.fixed = mquery.queryMatches;
   });
 

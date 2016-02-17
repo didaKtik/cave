@@ -57,16 +57,6 @@ var styleTask = function(stylesPath, srcs) {
     .pipe($.size({title: stylesPath}));
 };
 
-var imageOptimizeTask = function(src, dest) {
-  return gulp.src(src)
-    .pipe($.imagemin({
-      progressive: true,
-      interlaced: true
-    }))
-    .pipe(gulp.dest(dest))
-    .pipe($.size({title: 'images'}));
-};
-
 var optimizeHtmlTask = function(src, dest) {
   var assets = $.useref.assets({
     searchPath: ['.tmp', 'app']
@@ -118,36 +108,59 @@ gulp.task('ensureFiles', function(cb) {
 
 // Lint JavaScript
 gulp.task('lint', ['ensureFiles'], function() {
-  return gulp.src([
-      'app/scripts/**/*.js',
-      'app/elements/**/*.js',
-      'app/elements/**/*.html',
-      'gulpfile.js'
-    ])
-    .pipe(reload({
-      stream: true,
-      once: true
-    }))
+  return; // gulp.src([
+    //   'app/scripts/**/*.js',
+    //   'app/elements/**/*.js',
+    //   'app/elements/**/*.html',
+    //   'gulpfile.js'
+    // ])
+    // .pipe(reload({
+    //   stream: true,
+    //   once: true
+    // }))
 
   // JSCS has not yet a extract option
-  .pipe($.if('*.html', $.htmlExtract({strip: true})))
-  .pipe($.jshint())
-  .pipe($.jscs())
-  .pipe($.jscsStylish.combineWithHintResults())
-  .pipe($.jshint.reporter('jshint-stylish'));
+  // .pipe($.if('*.html', $.htmlExtract({strip: true})))
+  // .pipe($.jshint())
+  // .pipe($.jscs())
+  // .pipe($.jscsStylish.combineWithHintResults())
+  // .pipe($.jshint.reporter('jshint-stylish'));
   // .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
 });
 
 // Optimize images
 gulp.task('images', function() {
-  return imageOptimizeTask('app/images/**/*', dist('images'));
+  // Images
+  gulp.src([
+      'app/{images,audio-images}/**/*.{jpg,png}',
+      '!app/{images,audio-images}/**/*-icon.{jpg,png}'
+    ])
+    .pipe($.imageResize({
+      width : 320,
+      upscale: false
+    }))
+    .pipe($.imagemin({
+      progressive: true
+      // interlaced: true // gif
+    }))
+    .pipe(gulp.dest(dist()))
+    .pipe($.size({title: 'images'}));
+  // Icons
+  return gulp.src('app/{images,audio-images}/**/*-icon.{jpg,png}')
+    .pipe($.imageResize({
+      width : 180
+    }))
+    .pipe($.imagemin({
+      progressive: true
+    }))
+    .pipe(gulp.dest(dist()))
+    .pipe($.size({title: 'icons'}));
 });
 
 // Copy all files at the root level (app)
 gulp.task('copy', function() {
   var app = gulp.src([
     'app/*',
-    '!app/*.todo',
     '!app/test',
     '!app/elements',
     '!app/bower_components',
@@ -163,16 +176,11 @@ gulp.task('copy', function() {
     'app/bower_components/{webcomponentsjs,platinum-sw,sw-toolbox,promise-polyfill}/**/*'
   ]).pipe(gulp.dest(dist('bower_components')));
 
-  // Latter these sounds and audio-images should be transferred via a minifying process
-  var sounds = gulp.src([
-    'app/sounds/**/*'
-  ]).pipe(gulp.dest(dist('sounds')));
-
-  var audioImages = gulp.src([
-    'app/audio-images/**/*'
+  var audios = gulp.src([
+    'app/audio-images/**/*.{ogg,mp3}'
   ]).pipe(gulp.dest(dist('audio-images')));
 
-  return merge(app, bower, sounds, audioImages)
+  return merge(app, bower, audios)
     .pipe($.size({
       title: 'copy'
     }));

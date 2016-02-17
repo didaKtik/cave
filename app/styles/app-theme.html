@@ -32,7 +32,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     /* Global custom css properties are defined here */
 
     /* Dark theme */
-    --primary-text-color: #fff; /* white */
+    --primary-text-color: #fff;
     /* following https://www.google.com/design/spec/style/color.html#color-ui-color-application */
     --secondary-text-color: rgba(255, 255, 255, 0.7);
     --disabled-text-color: rgba(255, 255, 255, 0.3);
@@ -41,15 +41,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     --secondary-background-color: #303030;
     --tertiary-background-color: #424242;
 
+    /* Light theme */
+/*    --primary-text-color: var(--light-theme-text-color);
+    --secondary-text-color: rgba(255, 255, 255, 0.54);
+    --disabled-text-color: rgba(255, 255, 255, 0.38);
+    --divider-color: var(--light-theme-divider-color);
+    --primary-background-color: var(--light-theme-background-color);
+    --secondary-background-color: #fafafa;
+    --tertiary-background-color: #f5f5f5;*/
+
     /* Primary color */
-    --primary-color: #1f78b4;
-    --light-primary-color: #238cd1;
-    --dark-primary-color: #15527a;
+    --primary-color: #2196F3;
+    --light-primary-color: #BBDEFB;
+    --dark-primary-color: #1976D2;
 
     /* Accent color */
-    --accent-color: #ff7f00;
-    --light-accent-color: #ff9933;
-    --dark-accent-color: #b85c00;
+    --accent-color: #388E3C;
+    --light-accent-color: #4CAF50;
+    --dark-accent-color: #388E3C;
+
+    /* Image icon */
+    --image-icon-color: #cc181e;
+
+    /* Links colors */
+    --link-hover-color: var(--accent-color);
 
     /* Font styles */
     --paper-font-title: {
@@ -60,7 +75,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     --paper-font-subhead: {
       @apply(--paper-font-common-base);
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 500;
     };
 
@@ -73,7 +88,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     --paper-font-sm-subhead: {
       @apply(--paper-font-common-base);
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 500;
     };
   }
 
@@ -84,11 +99,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     background: var(--primary-background-color);
   }
 
+  a {
+    color: inherit;
+  }
+
+  a:hover {
+    color: var(--link-hover-color);
+  }
+
   /* Drawer panel + main panel */
   paper-drawer-panel {
     max-width: 960px;
     position: relative;
     margin: 0 auto;
+    --paper-drawer-panel-scrim-opacity: 0.6;
+    --paper-drawer-panel-scrim: {
+      background-color: var(--primary-background-color);
+    };
     --paper-drawer-panel-right-drawer-container: {
       background-color: var(--secondary-background-color);
       color: var(--secondary-text-color);
@@ -96,13 +123,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   /* Drawer panel */
+  paper-drawer-panel [drawer] {
+    border-left-color: var(--primary-color);
+    border-left-style: solid;
+  }
+
   paper-menu {
     --paper-menu-background-color: var(--secondary-background-color);
     --paper-menu-color: var(--secondary-text-color);
-
-    --paper-menu-focused-item: {
-      color: var(--primary-text-color);
-    }
 
     --paper-menu-selected-item: {
       color: var(--accent-color);
@@ -117,7 +145,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   paper-menu a paper-item {
-    width: 100%;
+    width: 50%;
+  }
+
+  paper-menu a iron-image {
+    --iron-image-width: 42px; 
+    --iron-image-height: 42px; 
+    border-radius: 50%;
   }
 
   /* Main panel: toolbar + pages */
@@ -129,43 +163,67 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   /* Toolbar */
-  #mainToolBar {
-    background-color: var(--primary-color);
-    /*background-color: var(--primary-background-color);*/
+  #toolbarSelector > :not(.iron-selected) {
+    display: none !important;
+  }
+
+  .mainToolBar {
+    background: var(--secondary-background-color);
     --paper-toolbar-height: 120px;
     --paper-toolbar-sm-height: 120px;
     border-radius: 15px 0 0 0;
   }
 
-  iron-image.icon-img {
-    /* Use <iron-image> API */
-    --iron-image-width: 108px;
-  }
-
-  /* ::shadow pseudo-element is deprecated, but no mixin API is provided
-    for the <img> inside <iron-image>... So we will wait! */
-  iron-image.icon-img::shadow > img {
+  .mainToolBar iron-image {
     border-radius: 50%;
   }
 
-  .myName {
-    @apply(--paper-font-sm-title);
+  .mainToolBar::shadow .toolbar-tools {
+    /*@apply(--layout-center-justified);*/
+    padding: 0 4px;
+  }
+
+  .mainToolBar iron-image::shadow #img {
+    width: 95px;
+    height: 95px;
+  }
+
+  .mainToolBar::shadow paper-icon-button[icon=menu] {
+    margin: 0;
+  }
+
+  .titles {
+    text-align: center;
+    margin: 0 5px;
+  }
+
+  .greeting {
+    @apply(--paper-font-headline);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--dark-primary-color);
     padding: 0 0 10px 0;
   }
 
   .subtitle {
-    @apply(--paper-font-sm-subhead);
-    color: var(--accent-color);
-    padding: 10px 0 0 0;
+    @apply(--paper-font-subhead);
+    color: var(--secondary-text-color);
+  }
+
+  paper-icon-button {
+    --paper-icon-button: {
+      color: var(--accent-color);
+    };
   }
 
   /* Pages */
-  #contentPanelMain {
+  .contentPanelMain {
     background: var(--primary-background-color);
   }
 
-  section[data-route="home"] paper-material {
-    @apply(--paper-font-body2);
+  .imageFlipCard front iron-image {
+    --iron-image-width: 100%;
+    border-radius: 10px;
   }
 
   /* Warning dialog */
@@ -176,29 +234,51 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   /* Breakpoints */
 
-  /* Small */
-  @media (max-width: 600px) {
+  /* Small mobile */
+  @media (max-width: 360px) {
+    .greeting {
+      @apply(--paper-font-sm-title);
+    }
 
-/*    #drawer .paper-toolbar {
-      margin-left: 16px;
-    }*/
+    .subtitle {
+      @apply(--paper-font-sm-subhead);
+    }
   }
 
   /* Tablet+ */
   @media (min-width: 601px) {
-
-    /* Toolbar */
-    .myName {
-      @apply(--paper-font-title);
+    .greeting {
+      font-size: 26px;
     }
 
-    .subtitle {
-      @apply(--paper-font-subhead);
+    /* Toolbar */
+    /* --paper-toolbar-content can't be used because of this issue:
+    https://github.com/Polymer/polymer/issues/2149 */
+    .mainToolBar::shadow .toolbar-tools {
+      padding: 0 16px;
+    }
+
+    /* Same here custom css properties are not re-definable in a media query */
+    .mainToolBar iron-image::shadow #img {
+      width: 108px;
+      height: 108px;
+    }
+
+    .mainToolBar::shadow paper-icon-button[icon=menu] {
+      margin-right: 24px;
     }
 
     /* Pages */
     iron-pages {
       padding: 48px 62px;
+    }
+  }
+
+  @media (min-width: 961px) {
+    paper-drawer-panel {
+      border-left-color: black;
+      border-left-style: solid;
+      border-radius: 15px 0 0 0;
     }
   }
 
@@ -208,8 +288,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     @apply(--layout-wrap);
   }
 
+  .centeringContainer {
+    position: absolute;
+    @apply(--layout-fit);
+    @apply(--layout-horizontal);
+    @apply(--layout-center-center);
+  }
+
+  .centeringContainer iron-icon {
+    color: var(--image-icon-color);
+    --iron-icon-width: 30px;
+    --iron-icon-height: 30px;
+    opacity: 0.8;
+  }
+
+  .centeringContainer iron-icon:hover {
+    color: var(--link-hover-color);
+    opacity: 1;
+  }
+
   .flexchild {
     @apply(--layout-flex);
+  }
+
+  .accent {
+    color: var(--accent-color);
+  }
+
+  .primary {
+    color: var(--primary-color);
   }
 
   /* Material Design Adaptive Breakpoints */
@@ -253,38 +360,4 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   @media all and (min-width: 1281px) and (max-width: 1600px) { }
   /* desktop-xlarge */
   @media all and (min-width: 1601px) and (max-width: 1920px) { }
-
-
-/*    #mainToolbar.tall .app-name {
-      font-size: 40px;
-      font-weight: 300;
-      -webkit-transform-origin: left center;
-      transform-origin: left center;
-    }
-
-    #mainToolbar .middle-container,
-    #mainToolbar .bottom-container {
-      @apply(--layout-horizontal);
-      @apply(--layout-center);
-    }
-
-    #mainToolbar .middle-container  {
-      height: 100%;
-      margin-left: 48px;
-    }
-
-    #mainToolbar:not(.tall) .middle-container {
-      font-size: 18px;
-      padding-bottom: 0;
-    }
-
-    #mainToolbar .bottom-container {
-      @apply(--paper-font-subhead);
-      margin-left: 48px;
-    }
-*/
-    /* Height of the scroll area */
-/*    .content {
-      height: 900px;
-    }*/
 </style>
