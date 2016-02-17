@@ -17007,6 +17007,11 @@ module.exports = Array.isArray || function (arr) {
     background: var(--primary-background-color);
   }
 
+  .imageFlipCard front iron-image {
+    --iron-image-width: 100%;
+    border-radius: 10px;
+  }
+
   /* Warning dialog */
   #toast .toast-hide-button {
     color: var(--accent-color);
@@ -17067,6 +17072,25 @@ module.exports = Array.isArray || function (arr) {
   .container {
     @apply(--layout-horizontal);
     @apply(--layout-wrap);
+  }
+
+  .centeringContainer {
+    position: absolute;
+    @apply(--layout-fit);
+    @apply(--layout-horizontal);
+    @apply(--layout-center-center);
+  }
+
+  .centeringContainer iron-icon {
+    color: var(--image-icon-color);
+    --iron-icon-width: 30px;
+    --iron-icon-height: 30px;
+    opacity: 0.8;
+  }
+
+  .centeringContainer iron-icon:hover {
+    color: var(--link-hover-color);
+    opacity: 1;
   }
 
   .flexchild {
@@ -17194,7 +17218,7 @@ module.exports = Array.isArray || function (arr) {
         color: var(--image-icon-color);
         --iron-icon-width: 30px;
         --iron-icon-height: 30px;
-        opacity: 0.6;
+        opacity: 0.8;
 
         @apply(--my-card-icon);
       }
@@ -17259,7 +17283,9 @@ module.exports = Array.isArray || function (arr) {
     <div class="image-container">
       <iron-image hidden$="[[!image]]" src="[[image]]" preload="" fade=""></iron-image>
       <a href="[[link]]" target="_blank" hidden="[[!link]]">
-        <iron-icon icon="my:link"></iron-icon>
+        <paper-material elevation="1">
+          <iron-icon icon="my:link"></iron-icon>
+        </paper-material>
       </a>
     </div>
     <div id="theRest">
@@ -18083,6 +18109,96 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
   <g id="link"><path d="M9 5v2h6.59L4 18.59 5.41 20 17 8.41V15h2V5z"></path></g>
   <g id="chevron-left"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></g>
   <g id="chevron-right"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></g>
+  <g id="turning"><path d="M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z"></path></g>
 </defs></svg>
 </iron-iconset-svg>
-</div></body></html>
+<dom-module id="flip-card" assetpath="flip-card/">
+  <template>
+    <style>
+      :host {
+        display: block;
+        perspective: 1000px; 
+      }
+
+      .wrapper > ::content front, ::content back {
+        display: block;
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+        transition: all 1s ease-in-out; 
+      }
+
+      .wrapper > ::content front {
+        left: 0;
+        top: 0;
+      }
+
+      .wrapper > ::content back {
+        /*@apply(--layout-fit);*/
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+
+      .wrapper > ::content front {
+        transform: rotateY(0) rotateX(0); 
+      }
+
+      .wrapper > ::content back {
+        transform: rotateY(180deg); 
+      }
+
+      :host(.flip) .wrapper > ::content front {
+        transform: rotateY(180deg); 
+      }
+
+      :host(.flip) .wrapper > ::content back {
+        transform: rotateY(0); 
+      }
+
+      :host([axis="x"]) .wrapper > ::content back {
+        transform: rotateX(180deg); 
+      }
+
+      :host([axis="x"].flip) .wrapper > ::content front {
+        transform: rotateX(-180deg); 
+      }
+
+      :host([axis="x"].flip) .wrapper > ::content back {
+        transform: rotateX(360deg); 
+      }
+    </style>
+
+    <div class="wrapper" on-tap="flip">
+      <content id="front" select="front"></content>
+      <content id="back" select="back"></content>
+    </div>
+
+  </template>
+  
+  <script>
+
+    Polymer({
+      is: 'flip-card',
+
+      // attached: function() {
+      //   this.flip
+      // }
+
+      flip: function(e) {
+        if (e.target.tagName !== 'A') {
+          this.flipped = this.flipped ? false : true;
+
+          var front = Polymer.dom(this.$.front).getDistributedNodes()[0],
+            back = Polymer.dom(this.$.back).getDistributedNodes()[0];
+
+          setTimeout(function() {
+            front.style.position = this.flipped ? 'absolute' : 'static';
+            back.style.position = this.flipped ? 'static' : 'absolute';
+          }.bind(this), 500);
+
+          this.toggleClass('flip');
+        }
+      }
+    });
+  </script>
+</dom-module></div></body></html>

@@ -206,6 +206,11 @@
     background: var(--primary-background-color);
   }
 
+  .imageFlipCard front iron-image {
+    --iron-image-width: 100%;
+    border-radius: 10px;
+  }
+
   /* Warning dialog */
   #toast .toast-hide-button {
     color: var(--accent-color);
@@ -266,6 +271,25 @@
   .container {
     @apply(--layout-horizontal);
     @apply(--layout-wrap);
+  }
+
+  .centeringContainer {
+    position: absolute;
+    @apply(--layout-fit);
+    @apply(--layout-horizontal);
+    @apply(--layout-center-center);
+  }
+
+  .centeringContainer iron-icon {
+    color: var(--image-icon-color);
+    --iron-icon-width: 30px;
+    --iron-icon-height: 30px;
+    opacity: 0.8;
+  }
+
+  .centeringContainer iron-icon:hover {
+    color: var(--link-hover-color);
+    opacity: 1;
   }
 
   .flexchild {

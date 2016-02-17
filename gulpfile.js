@@ -336,7 +336,10 @@ gulp.task('deploy-gh-pages', function() {
       remoteUrl: 'https://$GH_TOKEN@github.com/polymerelements/polymer-starter-kit.git',
       silent: true,
       branch: 'gh-pages'
-    }), $.ghPages()));
+    }), $.ghPages({
+      remote: 'https://github.com/didaKtik/didaKtik.github.io.git',
+      branch: 'master'
+    })));
 });
 
 // Load tasks for web-component-tester
