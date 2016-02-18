@@ -8,5 +8,4 @@ app/**/bower_components
 app/*images
 app/sounds
 app/test
-app/elements
 **/*.todo

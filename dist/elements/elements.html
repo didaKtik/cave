@@ -16759,8 +16759,8 @@ module.exports = Array.isArray || function (arr) {
       app.route = 'home';
     });
 
-    page('/webDev', function() {
-      app.route = 'webDev';
+    page('/webdev', function() {
+      app.route = 'webdev';
     });
 
     page('/transport', function() {
@@ -17678,6 +17678,11 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
         position: relative;
       }
 
+      /* IE 10 support for HTML5 hidden attr */
+      [hidden] {
+        display: none !important;
+      }
+
       iron-selector > :not(.iron-selected) {
         display: none !important;
       }
@@ -17692,7 +17697,7 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
         @apply(--audio-images-image);
       }
 
-      #ended-buttons, #playing-buttons {
+      #endedButtons, #playingButtons {
         @apply(--layout-fit);
         @apply(--layout-horizontal);
         @apply(--layout-center);
@@ -17716,16 +17721,16 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
       }
 
       /* When not playing the stop button is not visible */
-      :host(:not(.playing)) #playing-buttons {
+      :host(:not(.playing)) #playingButtons {
         display: none;
       } 
 
       /* When playing the play and chevrons buttons are not visible */
-      :host(.playing) #ended-buttons {
+      :host(.playing) #endedButtons {
         display: none;
       }
 
-      :host(.playing):not(:hover) #playing-buttons {
+      :host(.playing):not(:hover) #playingButtons {
         opacity: 0.7;
       }
     </style>
@@ -17738,12 +17743,12 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
       </template>
     </iron-selector>
 
-    <div id="ended-buttons">
+    <div id="endedButtons" hidden="">
       <paper-button on-tap="previous"><iron-icon icon="my:chevron-left"></iron-icon></paper-button>
       <paper-button on-tap="play"><iron-icon icon="my:play-arrow"></iron-icon></paper-button>
       <paper-button on-tap="next"><iron-icon icon="my:chevron-right"></iron-icon></paper-button>
     </div>
-    <div id="playing-buttons">
+    <div id="playingButtons">
       <paper-button on-tap="stop"><iron-icon icon="my:stop"></iron-icon></paper-button>
     </div>
 
@@ -17771,6 +17776,15 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
       attached: function() {
         window.addEventListener('WebComponentsReady', function() {
           createjs.Sound.alternateExtensions = ['mp3'];
+
+          var loadedSounds = 0;
+          createjs.Sound.on('fileload', function() {
+            loadedSounds += 1;
+            if (loadedSounds === this.srcs.length) {
+              this.$.endedButtons.hidden = false;
+            }
+          }.bind(this));
+          
           this.srcs.forEach(function(item) {
             createjs.Sound.registerSound(this.path + item.soundId + '.ogg', item.soundId);
           }.bind(this));
@@ -17837,7 +17851,7 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
     <iron-media-query query="(min-width: 601px)" query-matches="{{tablet}}"></iron-media-query>
     <audio-images selected="next" on-play="onPlay" on-ended="onEnded" srcs="[
         {&quot;imageSrc&quot;: &quot;home-icon.png&quot;, &quot;soundId&quot;: &quot;next&quot;},
-        {&quot;imageSrc&quot;: &quot;webDev-icon.jpg&quot;, &quot;soundId&quot;: &quot;webDev&quot;},
+        {&quot;imageSrc&quot;: &quot;webdev-icon.jpg&quot;, &quot;soundId&quot;: &quot;webdev&quot;},
         {&quot;imageSrc&quot;: &quot;transport-icon.png&quot;, &quot;soundId&quot;: &quot;transport&quot;}
       ]" ,="" path="audio-images/home/">
     </audio-images>
@@ -17887,7 +17901,7 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
 
           return {
             next: function() {},
-            webDev: openDrawerAndSelect.bind(this),
+            webdev: openDrawerAndSelect.bind(this),
             transport: openDrawerAndSelect.bind(this)
           };
         }.bind(this))();
@@ -17902,7 +17916,7 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
 
           return {
             next: function() {},
-            webDev: closeDrawerAndDeselect.bind(this),
+            webdev: closeDrawerAndDeselect.bind(this),
             transport: closeDrawerAndDeselect.bind(this)
           };
         }.bind(this))();
@@ -18124,7 +18138,11 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
         display: block;
         transform-style: preserve-3d;
         backface-visibility: hidden;
-        transition: all 1s ease-in-out; 
+        transition: all 1s ease-in-out;
+
+        -webkit-transform-style: preserve-3d;
+        -webkit-backface-visibility: hidden;
+        -webkit-transition: all 1s ease-in-out;
       }
 
       .wrapper > ::content front {
@@ -18133,7 +18151,6 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
       }
 
       .wrapper > ::content back {
-        /*@apply(--layout-fit);*/
         position: absolute;
         left: 0;
         top: 0;
@@ -18141,30 +18158,37 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
 
       .wrapper > ::content front {
         transform: rotateY(0) rotateX(0); 
+        -webkit-transform: rotateY(0) rotateX(0);
       }
 
       .wrapper > ::content back {
-        transform: rotateY(180deg); 
+        transform: rotateY(180deg);
+        -webkit-transform: rotateY(180deg);
       }
 
       :host(.flip) .wrapper > ::content front {
         transform: rotateY(180deg); 
+        -webkit-transform: rotateY(180deg);
       }
 
       :host(.flip) .wrapper > ::content back {
-        transform: rotateY(0); 
+        transform: rotateY(0);
+        -webkit-transform: rotateY(0);
       }
 
       :host([axis="x"]) .wrapper > ::content back {
-        transform: rotateX(180deg); 
+        transform: rotateX(180deg);
+        -webkit-transform: rotateX(180deg);
       }
 
       :host([axis="x"].flip) .wrapper > ::content front {
-        transform: rotateX(-180deg); 
+        transform: rotateX(-180deg);
+        -webkit-transform: rotateX(-180deg); 
       }
 
       :host([axis="x"].flip) .wrapper > ::content back {
-        transform: rotateX(360deg); 
+        transform: rotateX(360deg);
+        -webkit-transform: rotateX(360deg);
       }
     </style>
 
@@ -18179,10 +18203,6 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
 
     Polymer({
       is: 'flip-card',
-
-      // attached: function() {
-      //   this.flip
-      // }
 
       flip: function(e) {
         if (e.target.tagName !== 'A') {
