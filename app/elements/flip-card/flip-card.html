@@ -1,0 +1,123 @@
+<!--
+Flip Card provides drop-in support for CSS 3D cards that flip over. Your browser
+must support CSS 3D Transforms in order for it to work properly. Useful for
+bios, service listings, and other situations where you might want to rely on
+user interest/interaction before showing more content.
+
+Example
+
+    <flip-card axis="x">
+      <front>Front of card</front>
+      <back>Back of card</back>
+    </flip-card>
+
+Options
+
+An `axis` attribute can be added directly to the `<flip-card>` element. At this
+time there are only two options:
+
+* `y` axis is default. It's what you typically see. The card flips left to right.
+* `x` axis means it turns upside-down while it flips.
+
+@demo
+@homepage http://rupl.github.io/flip-card
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<dom-module id="flip-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+        perspective: 1000px; 
+      }
+
+      .wrapper > ::content front, ::content back {
+        display: block;
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+        transition: all 1s ease-in-out;
+
+        -webkit-transform-style: preserve-3d;
+        -webkit-backface-visibility: hidden;
+        -webkit-transition: all 1s ease-in-out;
+      }
+
+      .wrapper > ::content front {
+        left: 0;
+        top: 0;
+      }
+
+      .wrapper > ::content back {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+
+      .wrapper > ::content front {
+        transform: rotateY(0) rotateX(0); 
+        -webkit-transform: rotateY(0) rotateX(0);
+      }
+
+      .wrapper > ::content back {
+        transform: rotateY(180deg);
+        -webkit-transform: rotateY(180deg);
+      }
+
+      :host(.flip) .wrapper > ::content front {
+        transform: rotateY(180deg); 
+        -webkit-transform: rotateY(180deg);
+      }
+
+      :host(.flip) .wrapper > ::content back {
+        transform: rotateY(0);
+        -webkit-transform: rotateY(0);
+      }
+
+      :host([axis="x"]) .wrapper > ::content back {
+        transform: rotateX(180deg);
+        -webkit-transform: rotateX(180deg);
+      }
+
+      :host([axis="x"].flip) .wrapper > ::content front {
+        transform: rotateX(-180deg);
+        -webkit-transform: rotateX(-180deg); 
+      }
+
+      :host([axis="x"].flip) .wrapper > ::content back {
+        transform: rotateX(360deg);
+        -webkit-transform: rotateX(360deg);
+      }
+    </style>
+
+    <div class="wrapper" on-tap="flip">
+      <content id="front" select="front"></content>
+      <content id="back" select="back"></content>
+    </div>
+
+  </template>
+  
+  <script>
+
+    Polymer({
+      is: 'flip-card',
+
+      flip: function(e) {
+        if (e.target.tagName !== 'A') {
+          this.flipped = this.flipped ? false : true;
+
+          var front = Polymer.dom(this.$.front).getDistributedNodes()[0],
+            back = Polymer.dom(this.$.back).getDistributedNodes()[0];
+
+          setTimeout(function() {
+            front.style.position = this.flipped ? 'absolute' : 'static';
+            back.style.position = this.flipped ? 'static' : 'absolute';
+          }.bind(this), 500);
+
+          this.toggleClass('flip');
+        }
+      }
+    });
+  </script>
+</dom-module>

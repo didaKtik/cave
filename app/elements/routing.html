@@ -1,0 +1,93 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<script src="../bower_components/page/page.js"></script>
+
+<script>
+  window.addEventListener('WebComponentsReady', function() {
+
+    // We use Page.js for routing. This is a Micro
+    // client-side router inspired by the Express router
+    // More info: https://visionmedia.github.io/page.js/
+
+    // Removes end / from app.baseUrl which page.base requires for production
+    if (window.location.port === '') {  // if production
+      page.base(app.baseUrl.replace(/\/$/, ''));
+    }
+
+    // Middleware
+    function scrollToTop(ctx, next) {
+      app.scrollPageToTop();
+      next();
+    }
+
+    function closeDrawer(ctx, next) {
+      app.closeDrawer();
+      next();
+    }
+
+    /* The order of the route declarations plays a role! */
+
+    // These callbacks apply to all routes
+    page('*', scrollToTop, closeDrawer, function(ctx, next) {
+      // next is the next callback associated to this route
+      // But it won't be the next '*', it will be the next declared callback
+      next();
+    });
+
+    page('/', function() {
+      // next is not called, so page will not go further
+      app.route = 'home';
+    });
+
+    page(app.baseUrl, function() {
+      // route is an observable, and as <pages> extends <iron-selector> selected={{route}}
+      // it makes the trick!
+      app.route = 'home';
+    });
+
+    page('/webdev', function() {
+      app.route = 'webdev';
+    });
+
+    page('/transport', function() {
+      app.route = 'transport';
+    });
+
+    // page('/users', function() {
+    //   app.route = 'users';
+    // });
+
+    // Parameters can be passed with url fragments, using hash/:param1/:param2
+    // Then accessed with ctx.params.param1
+    // page('/users/:name', function(data) {
+    //   app.route = 'user-info';
+    //   app.params = data.params;
+    // });
+
+    // These callbacks apply to all remaining routes
+    page('*', function() {
+      app.$.toast.text = 'Can\'t find: ' + window.location.href  + '. Redirected you to Home Page';
+      app.$.toast.show();
+      page.redirect(app.baseUrl);
+    });
+
+    // add #! before urls
+    // #! is called hashbang or shebang or poundbang
+    // They are used to please the Googlebot
+    page({
+      hashbang: true
+    });
+
+    /* Default 404 behaviour
+    By default when a route is not matched, page.js invokes page.stop() to unbind itself, and proceed with redirecting to the location requested. This means you may use page.js with a multi-page application without explicitly binding to certain links */
+
+  });
+</script>

@@ -1,0 +1,161 @@
+<!--
+@author Pierre Mohr Durdez
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<dom-module id="my-card">
+  <template>
+    <style include="shared-styles">
+      /* mobile */
+      :host {  
+        display: block;
+        box-sizing: border-box;
+        border-radius: 10px;
+        height: 100%;
+        padding: 16px;
+        width: calc(98.66% - 16px);
+        margin: 16px auto;
+        color: var(--primary-text-color);
+        background: var(--tertiary-background-color);
+      }
+
+      /* IE 10 support for HTML5 hidden attr */
+      [hidden] {
+        display: none !important;
+      }
+
+      .image-container {
+        position: relative;
+        width: 50%;
+        float: left;
+        margin: 0 10px 0 0;
+      }
+
+      .image-container iron-image {
+        --iron-image-width: 100%;
+        --iron-image-placeholder: {
+          background-color: var(--primary-color, white);
+        };
+        border-radius: 10px;
+
+        @apply(--my-card-image);
+      }
+
+      .image-container a {
+        position: absolute;
+        @apply(--layout-fit);
+        @apply(--layout-horizontal);
+        @apply(--layout-center-center);
+      }
+
+      .image-container iron-icon {
+        color: var(--image-icon-color);
+        --iron-icon-width: 30px;
+        --iron-icon-height: 30px;
+        opacity: 0.8;
+
+        @apply(--my-card-icon);
+      }
+
+      .image-container iron-icon:hover {
+        color: var(--link-hover-color);
+        opacity: 1;
+
+        @apply(--my-card-icon);
+      }
+
+      #title {
+        @apply(--paper-font-subhead);
+        margin: 0 0 10px 0;
+        text-align: center;
+      }
+
+      #theRest {
+        @apply(--paper-font-body1);
+        line-height: 18px;
+        text-align: justify;
+
+        @apply(--my-card-theRest);
+      }
+
+      /* mobile-small */
+      @media all and (min-width: 0) and (max-width: 360px) and (orientation: portrait) {
+        .image-container {
+          width: 100%;
+          margin: 0 0 10px 0;
+        }
+
+        #title {
+          margin: 10px 0;
+        }
+      }
+
+      /* tablet+ */
+      @media (min-width: 601px) {
+        :host {
+          width: calc(98% - 46px);
+          padding: 16px 30px;
+          margin: 16px auto;
+          margin-bottom: 32px;
+        }
+
+        .image-container {
+          width: 33%;
+          margin: 0 15px 0 0;
+        }
+
+        #title {
+          @apply(--paper-font-title);
+        }
+
+        #theRest {
+          @apply(--paper-font-body2);
+        }
+      }
+    </style>
+
+    <div class="image-container">
+      <iron-image hidden$="[[!image]]" src="[[image]]" preload fade></iron-image>
+      <a href=[[link]] target="_blank" hidden="[[!link]]">
+        <paper-material elevation="1">
+          <iron-icon icon="my:link"></iron-icon>
+        </paper-material>
+      </a>
+    </div>
+    <div id="theRest">
+      <div id="title">
+        <content select='.title'></content>
+      </div>
+      <content select=':not(.title)'></content>
+    </div>
+    <div style="clear: both;"></div>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'my-card',
+
+        properties: {
+          // The url of the card's image
+          image: {
+            type: String,
+            value: ''
+          },
+
+          // If default value not set [[!link]] data binding doesn't work!
+          link: {
+            type: String,
+            value: ''
+          }
+        }
+      });
+    })();
+  </script>
+</dom-module>

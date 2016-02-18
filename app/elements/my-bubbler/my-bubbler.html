@@ -1,0 +1,194 @@
+<!--
+@author Pierre Mohr Durdez
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<!-- id matches is attribute -->
+<dom-module id="my-bubbler">
+  <!-- declarative portion of the element definition -->
+  <template>
+    <style include="shared-styles">
+    :host {
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: inherit;
+    }
+
+    /*.bubble {
+      background-color: var(--primary-color);
+      width: 0px;
+      height: 0px;
+      opacity: 1;
+      position: absolute;
+      animation-name: pop;
+      animation-duration: 4s;
+      animation-iteration-count: infinite;
+      border-radius: 50%;
+      transform: translateZ(0);
+    }*/
+
+    .bubble {
+      background-color: var(--primary-color);
+      width: 20px;
+      height: 20px;
+      opacity: 0.8;
+      position: absolute;
+      /*animation-name: pop;
+      animation-duration: 4s;
+      animation-iteration-count: infinite;*/
+      border-radius: 50%;
+      transform: translateZ(0);
+    }
+
+    .accentColor {
+      background-color: var(--accent-color);
+    }
+
+    @keyframes pop {
+        to {
+          height: 300px;
+          width: 300px;
+          margin-top: -150px;
+          margin-left: -150px;
+          opacity: 0.2;
+        }
+    }
+
+    @media (max-width: 600px) {
+      /* Disable this functionality on mobile */
+      :host {
+        display: none;
+      }
+    }
+    </style>
+
+    <template is="dom-repeat" items="{{bubbles}}">
+      <!-- Dynamically created elements: not accessible via the this.$ hash,
+      but via the this.$$ function yes (first node only however) -->
+      <span class="bubble accentColor" on-tap="popBubble"></span>
+    </template>
+
+    <audio>
+      <!-- Better use $= for binding to a native element's attributes -->
+      <source id="mp3" type="audio/mpeg"></source>
+      <source id="ogg" type="audio/ogg"></source>
+    </audio>
+
+  </template>
+
+  <!-- imperative portion of the element definition -->
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        // is matches id of <dom-module>
+        is: 'my-bubbler',
+
+        properties: {
+          bubbles: {
+            type: Array,
+            notify: true
+          },
+
+          bubbleNumber: {
+            type: Number,
+            value: 5 // default
+          },
+
+          duration: {
+            type: Number,
+            value: 3
+          },
+
+          multicolor: Boolean,
+
+          soundSrc: {
+            type: String,
+            value: ''
+          }
+        },
+
+        attached: function() {
+          // Multicolors
+          this.colors = [
+            '#001f3f',
+            '#0074d9',
+            '#7fdbff',
+            '#39cccc',
+            '#3d9970',
+            '#2ecc40',
+            '#01ff70',
+            '#ffdc00',
+            '#ff851b',
+            '#ff4136',
+            '#f012be',
+            '#b10dc9',
+            '#85144b'
+          ];
+
+          // Can't get the good width here
+          // i.e. the width of the parent element
+          this.width = this.scrollWidth;
+          this.height = this.scrollHeight;
+
+          // Create an iterable array with length the desired number of bubbles
+          this.bubbles = Array.apply(null, Array(this.bubbleNumber)).map(function() {});
+
+          // Avoid lazy node insertion
+          Polymer.dom.flush();
+
+          // Polymer.dom(this.root).querySelectorAll('.bubble') and this.querySelectorAll('.bubble')
+          // are not the same!! (one returns an array, the other a node list!)
+          var bubbles = Polymer.dom(this.root).querySelectorAll('.bubble');
+
+          bubbles.forEach(function(bubble) {
+            // Is it better with .setAttribute ?
+            // bubble.style.animationDuration = this.duration + 's';
+            // bubble.style.animationDelay = (Math.random() * this.duration) + 's';
+
+            this.styleBubble(bubble);
+
+            // Restyle at each animation
+            // bubble.addEventListener('animationiteration', this.styleBubble.bind(this, bubble));
+          }.bind(this));
+
+          // Audio
+          if (this.soundSrc) {
+            this.$.mp3.setAttribute('src', this.soundSrc + '.mp3');
+            this.$.ogg.setAttribute('src', this.soundSrc + '.ogg');
+            this.audioEl = this.$$('audio');
+          }
+        },
+
+        styleBubble: function(bubble) {
+          var x = Math.floor(Math.random() * this.width);
+          var y = Math.floor(Math.random() * this.height);
+
+          bubble.style.top = y + 'px';
+          bubble.style.left = x + 'px';
+
+          if (this.multicolor) {
+            var color = this.colors[Math.floor(Math.random() * this.colors.length)];
+            bubble.style.backgroundColor = color;
+          } else {
+            this.toggleClass('accentColor', Math.random() < 0.5, bubble);
+          }
+        },
+
+        popBubble: function (e) {
+          if (this.soundSrc) {
+            this.audioEl.play();
+          }
+
+          var bubble = e.target;
+          Polymer.dom(this.root).removeChild(bubble);
+        }
+      });
+    })();
+  </script>
+</dom-module>

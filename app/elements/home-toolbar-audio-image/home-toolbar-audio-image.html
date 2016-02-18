@@ -1,0 +1,111 @@
+<!--
+@author Pierre Mohr Durdez
+@license MIT
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../audio-images/audio-images.html">
+
+<dom-module id="home-toolbar-audio-image">
+  <template>
+
+    <style>
+      :host {
+        display: block;
+        margin: 0 5px 0 0;
+      }
+
+      audio-images {
+        --audio-images-image: {
+          border-radius: 50%;
+        };
+      }
+    </style>
+
+    <iron-media-query query="(min-width: 601px)" query-matches="{{tablet}}"></iron-media-query>
+    <audio-images selected="next" on-play='onPlay' on-ended='onEnded' srcs='[
+        {"imageSrc": "home-icon.png", "soundId": "next"},
+        {"imageSrc": "webdev-icon.jpg", "soundId": "webdev"},
+        {"imageSrc": "transport-icon.png", "soundId": "transport"}
+      ]', path="audio-images/home/">
+    </audio-images>
+
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'home-toolbar-audio-image',
+
+      // Workaround for this issue: https://github.com/Polymer/polymer/issues/2149
+      setResponsiveStyle: function() {
+        var ai = this.$$('audio-images');
+        if (this.tablet) {
+          ai.customStyle['--audio-images-icons-width'] = '40px';
+          ai.customStyle['--audio-images-icons-height'] = '40px';
+          ai.customStyle['--audio-images-image-width'] = '108px';
+          ai.customStyle['--audio-images-image-height'] = '108px';
+        } else {
+          ai.customStyle['--audio-images-icons-width'] = '30px';
+          ai.customStyle['--audio-images-icons-height'] = '30px';
+          ai.customStyle['--audio-images-image-width'] = '95px';
+          ai.customStyle['--audio-images-image-height'] = '95px';
+        }
+        this.updateStyles();
+      },
+
+      attached: function() {
+        this.setResponsiveStyle();
+
+        // Define procedures to play for each selected audio-image
+        var drawer = document.querySelector('paper-drawer-panel'),
+            menu = drawer.querySelector('paper-menu');
+
+        this.playProcedures = (function() {
+          function openDrawerAndSelect() {
+            this.anchorSelected = menu.selectedItem;
+            this.anchorToSelect = document.querySelector('a[data-route=' + this.selected + ']');
+
+            this.anchorSelected.classList.remove('iron-selected');
+            this.anchorToSelect.classList.add('iron-selected');
+
+            drawer.openDrawer();
+          }
+
+          return {
+            next: function() {},
+            webdev: openDrawerAndSelect.bind(this),
+            transport: openDrawerAndSelect.bind(this)
+          };
+        }.bind(this))();
+
+        this.endedProcedures = (function() {
+          function closeDrawerAndDeselect() {
+            drawer.closeDrawer();
+
+            this.anchorToSelect.classList.remove('iron-selected');
+            this.anchorSelected.classList.add('iron-selected');
+          }
+
+          return {
+            next: function() {},
+            webdev: closeDrawerAndDeselect.bind(this),
+            transport: closeDrawerAndDeselect.bind(this)
+          };
+        }.bind(this))();
+      },
+
+      onPlay: function(e, d) {
+        this.selected = d.selectedSoundId;
+        this.playProcedures[this.selected]();
+      },
+
+      onEnded: function() {
+        this.endedProcedures[this.selected]();
+      }
+    });
+  })();
+  </script>
+</dom-module>
