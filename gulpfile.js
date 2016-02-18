@@ -182,11 +182,15 @@ gulp.task('copy', function() {
     'app/bower_components/{webcomponentsjs,platinum-sw,sw-toolbox,promise-polyfill}/**/*'
   ]).pipe(gulp.dest(dist('bower_components')));
 
+  var projects = gulp.src([
+    'app/projects/**/*'
+  ]).pipe(gulp.dest(dist('projects')));
+
   var audios = gulp.src([
     'app/audio_images/**/*.{ogg,mp3}'
   ]).pipe(gulp.dest(dist('audio_images')));
 
-  return merge(app, bower, audios)
+  return merge(app, bower, audios, projects)
     .pipe($.size({
       title: 'copy'
     }));

@@ -1,0 +1,473 @@
+/*
+  RESUME
+*/
+body {
+  margin: 0 0 15px 0;
+}
+
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+  font-size: 40px;
+  color: #1f78b4;
+  /*color: #0571b0;*/
+  line-height: 48px;
+  display: inline;
+}
+
+h2 {
+  font-size: 24px;
+  color: #999999;
+  line-height: 29px;
+}
+
+h3 {
+  font-size: 20px;
+  color: #999999;
+  line-height: 22px;
+}
+
+h4 {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.5);
+  line-height: 17px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 5px 0 5px 0;
+  font-weight: bold;
+}
+
+/* Horizontal rule */
+hr {
+  margin: 0;
+  border-top: 6px solid rgb(240, 240, 240);
+  border-radius: 3px;
+}
+
+a {
+  color: #1f78b4;
+}
+
+a:hover,
+.entry-title a:hover {
+  color: #ff7f00;
+}
+
+.container-fluid {
+  max-width: 960px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+
+
+/*
+  HEADER
+*/
+.biopic {
+  display: block;
+  width: 108px;
+  margin: 0 auto;
+}
+
+/* TODO: Replace with image later */
+#header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 10px -15px;
+}
+
+.header-link {
+  display: block;
+  color: #999999;
+  font-weight: bold;
+  text-align: center;
+  margin: 0;
+}
+
+.header-link-right {
+  text-align: right;
+  margin: 0 -5px 0 0;
+}
+
+.header-link-left {
+  text-align: left;
+  margin: 0 0 0 -5px;
+}
+
+span {
+  vertical-align: middle;
+  padding: 0 5px;
+}
+
+
+
+/*
+  LIFE GRAPH WITH D3
+*/
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+#graph {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.graph-tile:hover {
+  cursor: pointer;
+}
+
+.left-text,
+.right-text {
+  font-family: Roboto, sans-serif;
+  font-weight: bold;
+  fill: black;
+  fill-opacity: 0.5;
+}
+
+/* X AXIS */
+line {
+  stroke-width: 3;
+  marker-end: url(#arrowhead);
+}
+
+#arrowhead {
+  fill: black;
+  fill-opacity: 0.5;
+}
+
+.left-text {
+  text-anchor: start;
+}
+
+.right-text {
+  text-anchor: end;
+}
+
+/* Y AXIS */
+.year {
+  text-anchor: middle;
+  font-family: Roboto, sans-serif;
+  font-weight: bold;
+}
+
+
+
+/*
+  MAP
+*/
+#mapDiv {
+  height: 400px;
+  overflow: auto;
+}
+
+#map {
+  display: block;
+  height: calc((100% - 32px));
+}
+
+
+
+/*
+  ENTRIES
+*/
+.school-entry,
+.onlineCourse-entry,
+.work-entry,
+.project-entry,
+.rest-entry {
+  padding: 5px 0 0 0;
+}
+
+.entry-date {
+  font-size: 16px;
+  color: #999999;
+  float: left;
+}
+
+.entry-title {
+  display: inline;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.hr-title {
+  margin: 10px 0 0 0;
+}
+
+.entry-title a {
+  color: #999999;
+}
+
+.entry-institution {
+  display: inline;
+  color: #1f78b4;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.bullet{
+  padding: 0 5px 0 5px;
+  color: #999999;
+}
+
+.entry-location {
+  display: inline;
+  font-size: 16px;
+  color: #999999;
+}
+
+.entry-img {
+  max-width: 110px;
+  max-height: 90px;
+  display: block;
+  margin: 0 auto;
+}
+
+
+
+/*
+  BOOK AND MOVIE TILES
+*/
+.rest-entry {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.movie-tile-poster,
+.book-tile-poster {
+  width: 100%;
+}
+
+.movie-tile:hover,
+.book-tile:hover {
+    background-color: #EEE;
+    cursor: pointer;
+}
+
+.movie-tile-title,
+.book-tile-title,
+.movie-tile-author,
+.book-tile-author,
+.movie-tile-description,
+.book-tile-description {
+  display: none;
+}
+
+
+
+/*
+  MOVIE MODAL
+*/
+#trailer .modal-dialog {
+    margin-top: 200px;
+}
+
+.hanging-close {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    z-index: 9001;
+}
+
+#trailer-video {
+    width: 100%;
+    height: 100%;
+}
+
+.scale-media {
+    padding-bottom: 56.25%;
+    position: relative;
+}
+
+.scale-media iframe {
+    border: none;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 0;
+    background-color: white;
+}
+
+
+
+/*
+  BOOK MODAL
+*/
+#book-modal-title {
+  display: inline;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#book-modal-author {
+  display: inline;
+  color: #1f78b4;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#book-modal-img {
+  float: left;
+  width: 30%;
+  margin: 0 15px 0 0;
+}
+
+
+
+/*
+  HOVER.CSS EFFECTS
+*/
+/*!
+ * Hover.css (http://ianlunn.github.io/Hover/)
+ * Version: 2.0.2
+ * Author: Ian Lunn @IanLunn
+ * Author URL: http://ianlunn.co.uk/
+ * Github: https://github.com/IanLunn/Hover
+
+ * Made available under a MIT License:
+ * http://www.opensource.org/licenses/mit-license.php
+
+ * Hover.css Copyright Ian Lunn 2014. Generated with Sass.
+ */
+
+/* Out */
+@-webkit-keyframes hvr-buzz-out {
+  10% {
+    -webkit-transform: translateX(3px) rotate(2deg);
+    transform: translateX(3px) rotate(2deg);
+  }
+
+  20% {
+    -webkit-transform: translateX(-3px) rotate(-2deg);
+    transform: translateX(-3px) rotate(-2deg);
+  }
+
+  30% {
+    -webkit-transform: translateX(3px) rotate(2deg);
+    transform: translateX(3px) rotate(2deg);
+  }
+
+  40% {
+    -webkit-transform: translateX(-3px) rotate(-2deg);
+    transform: translateX(-3px) rotate(-2deg);
+  }
+
+  50% {
+    -webkit-transform: translateX(2px) rotate(1deg);
+    transform: translateX(2px) rotate(1deg);
+  }
+
+  60% {
+    -webkit-transform: translateX(-2px) rotate(-1deg);
+    transform: translateX(-2px) rotate(-1deg);
+  }
+
+  70% {
+    -webkit-transform: translateX(2px) rotate(1deg);
+    transform: translateX(2px) rotate(1deg);
+  }
+
+  80% {
+    -webkit-transform: translateX(-2px) rotate(-1deg);
+    transform: translateX(-2px) rotate(-1deg);
+  }
+
+  90% {
+    -webkit-transform: translateX(1px) rotate(0);
+    transform: translateX(1px) rotate(0);
+  }
+
+  100% {
+    -webkit-transform: translateX(-1px) rotate(0);
+    transform: translateX(-1px) rotate(0);
+  }
+}
+
+@keyframes hvr-buzz-out {
+  10% {
+    -webkit-transform: translateX(3px) rotate(2deg);
+    transform: translateX(3px) rotate(2deg);
+  }
+
+  20% {
+    -webkit-transform: translateX(-3px) rotate(-2deg);
+    transform: translateX(-3px) rotate(-2deg);
+  }
+
+  30% {
+    -webkit-transform: translateX(3px) rotate(2deg);
+    transform: translateX(3px) rotate(2deg);
+  }
+
+  40% {
+    -webkit-transform: translateX(-3px) rotate(-2deg);
+    transform: translateX(-3px) rotate(-2deg);
+  }
+
+  50% {
+    -webkit-transform: translateX(2px) rotate(1deg);
+    transform: translateX(2px) rotate(1deg);
+  }
+
+  60% {
+    -webkit-transform: translateX(-2px) rotate(-1deg);
+    transform: translateX(-2px) rotate(-1deg);
+  }
+
+  70% {
+    -webkit-transform: translateX(2px) rotate(1deg);
+    transform: translateX(2px) rotate(1deg);
+  }
+
+  80% {
+    -webkit-transform: translateX(-2px) rotate(-1deg);
+    transform: translateX(-2px) rotate(-1deg);
+  }
+
+  90% {
+    -webkit-transform: translateX(1px) rotate(0);
+    transform: translateX(1px) rotate(0);
+  }
+
+  100% {
+    -webkit-transform: translateX(-1px) rotate(0);
+    transform: translateX(-1px) rotate(0);
+  }
+}
+
+.hvr-buzz-out {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+}
+.hvr-buzz-out:hover, .hvr-buzz-out:focus, .hvr-buzz-out:active {
+  -webkit-animation-name: hvr-buzz-out;
+  animation-name: hvr-buzz-out;
+  -webkit-animation-duration: 0.75s;
+  animation-duration: 0.75s;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+  -webkit-animation-iteration-count: 1;
+  animation-iteration-count: 1;
+}

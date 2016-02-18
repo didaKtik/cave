@@ -18367,7 +18367,8 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
       is: 'flip-card',
 
       flip: function(e) {
-        if (e.target.tagName !== 'A') {
+        debugger;
+        if (e.target.tagName !== 'A' && e.target.tagName !== 'PAPER-BUTTON') {
           this.flipped = this.flipped ? false : true;
 
           var front = Polymer.dom(this.$.front).getDistributedNodes()[0],
