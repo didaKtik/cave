@@ -57,6 +57,15 @@ var styleTask = function(stylesPath, srcs) {
     .pipe($.size({title: stylesPath}));
 };
 
+// Compile and automatically prefix stylesheets
+gulp.task('styles', function() {
+  return styleTask('styles', ['**/*.css']);
+});
+
+gulp.task('elements', function() {
+  return styleTask('elements', ['**/*.css']);
+});
+
 var optimizeHtmlTask = function(src, dest) {
   var assets = $.useref.assets({
     searchPath: ['.tmp', 'app']
@@ -86,13 +95,39 @@ var optimizeHtmlTask = function(src, dest) {
     }));
 };
 
-// Compile and automatically prefix stylesheets
-gulp.task('styles', function() {
-  return styleTask('styles', ['**/*.css']);
+// Scan your HTML for assets & optimize them
+gulp.task('html', function() {
+  return optimizeHtmlTask(
+    ['app/**/*.html', '!app/{elements,test,bower_components}/**/*.html'],
+    dist());
 });
 
-gulp.task('elements', function() {
-  return styleTask('elements', ['**/*.css']);
+var pngquant = require('imagemin-pngquant');
+var optimizeImagesTask = function(src, width) {
+  return gulp.src(src)
+    .pipe($.imageResize({
+      width : width,
+      upscale: false
+    }))
+    .pipe($.imagemin({
+      progressive: true,
+      use: [pngquant()]
+    }))
+    .pipe(gulp.dest(dist()))
+    .pipe($.size({title: 'images'}));
+};
+
+// Optimize images
+gulp.task('images', function() {
+  optimizeImagesTask([
+    'app/{images,audio_images}/**/*.{jpg,png}',
+    '!app/{images,audio_images}/**/*-icon.{jpg,png}',
+    '!app/{images,audio_images}/**/*-large.{jpg,png}'
+  ], 320);
+
+  optimizeImagesTask('app/{images,audio_images}/**/*-large.{jpg,png}', 500);
+
+  return optimizeImagesTask('app/{images,audio_images}/**/*-icon.{jpg,png}', 180);
 });
 
 // Ensure that we are not missing required files for the project
@@ -128,35 +163,6 @@ gulp.task('lint', ['ensureFiles'], function() {
   // .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
 });
 
-// Optimize images
-gulp.task('images', function() {
-  // Images
-  gulp.src([
-      'app/{images,audio-images}/**/*.{jpg,png}',
-      '!app/{images,audio-images}/**/*-icon.{jpg,png}'
-    ])
-    .pipe($.imageResize({
-      width : 320,
-      upscale: false
-    }))
-    .pipe($.imagemin({
-      progressive: true
-      // interlaced: true // gif
-    }))
-    .pipe(gulp.dest(dist()))
-    .pipe($.size({title: 'images'}));
-  // Icons
-  return gulp.src('app/{images,audio-images}/**/*-icon.{jpg,png}')
-    .pipe($.imageResize({
-      width : 180
-    }))
-    .pipe($.imagemin({
-      progressive: true
-    }))
-    .pipe(gulp.dest(dist()))
-    .pipe($.size({title: 'icons'}));
-});
-
 // Copy all files at the root level (app)
 gulp.task('copy', function() {
   var app = gulp.src([
@@ -177,8 +183,8 @@ gulp.task('copy', function() {
   ]).pipe(gulp.dest(dist('bower_components')));
 
   var audios = gulp.src([
-    'app/audio-images/**/*.{ogg,mp3}'
-  ]).pipe(gulp.dest(dist('audio-images')));
+    'app/audio_images/**/*.{ogg,mp3}'
+  ]).pipe(gulp.dest(dist('audio_images')));
 
   return merge(app, bower, audios)
     .pipe($.size({
@@ -193,13 +199,6 @@ gulp.task('fonts', function() {
     .pipe($.size({
       title: 'fonts'
     }));
-});
-
-// Scan your HTML for assets & optimize them
-gulp.task('html', function() {
-  return optimizeHtmlTask(
-    ['app/**/*.html', '!app/{elements,test,bower_components}/**/*.html'],
-    dist());
 });
 
 // Vulcanize granular configuration

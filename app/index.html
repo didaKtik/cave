@@ -52,6 +52,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- <link rel="stylesheet" href="styles/main.css"> -->
   <!-- endbuild-->
 
+  <style>
+    body.loading #app {
+      display: none;
+    }
+
+    body.loading #splash {
+      opacity: 1;
+    }
+
+    #splash {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      transition: opacity 300ms cubic-bezier(0,0,0.2,1);
+      opacity: 0;
+      will-change: opacity;
+      z-index: 1;
+      background-color: #388E3C;
+    }
+    </style>
+
   <!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <!-- endbuild -->
@@ -64,11 +87,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- shared-styles is the name of the module, i.e. the id of the <dom-module> element -->
   <!-- Not an import, just say that the shared styles should be used at this level -->
   <style is="custom-style" include="shared-styles"></style>
-
 </head>
 
-<body unresolved>
+<body class="loading" unresolved>
   <span id="browser-sync-binding"></span>
+
+  <div id="splash"></div>
+
   <!-- Auto-binding template element extending the native template element -->
   <template is="dom-bind" id="app">
 
@@ -79,17 +104,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-menu attr-for-selected="data-route" selected="[[route]]">
           <a data-route="home" href="{{baseUrl}}">
             <paper-item>Home</paper-item>
-            <iron-image src="audio-images/home/home-icon.png" preload fade></iron-image>
+            <iron-image src="audio_images/home/home-icon.png" preload fade></iron-image>
           </a>
           <!-- What you define after the baseUrl is called a url fragment
           It si only used on the client side, and won't be part of requests -->
           <a data-route="webdev" href="{{baseUrl}}webdev">
             <paper-item>Web Projects</paper-item>
-            <iron-image src="audio-images/home/webdev-icon.jpg" preload fade></iron-image>
+            <iron-image src="audio_images/home/webdev-icon.jpg" preload fade></iron-image>
           </a>
           <a data-route="transport" href="{{baseUrl}}transport">
             <paper-item>Transport</paper-item>
-            <iron-image src="audio-images/home/transport-icon.png" preload fade></iron-image>
+            <iron-image src="audio_images/home/transport-icon.png" preload fade></iron-image>
           </a>
         </paper-menu>
       </div>
@@ -126,7 +151,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <section data-route="webdev">
             <paper-toolbar class="mainToolBar" data-route="webdev">
-              <iron-image src="audio-images/home/webdev-icon.jpg" preload fade></iron-image>
+              <iron-image src="audio_images/home/webdev-icon.jpg" preload fade></iron-image>
               <span class="flexchild"></span>
               <div class='titles'>
                 <div class="greeting">In Web development</div>
@@ -140,8 +165,47 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-material elevation="0">
                 <my-card image="images/webdev/hooked.jpg">
                   <div class="title">Hooked</div>
-                  <div>I was hooked by web development not long ago, but thanks to the awesome online courses offered by Udacity I could rapidly learn and practice a variety of topics. Starting in 2015 I have followed Udacity's <a href="https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001" target="_blank">Front-End Web Development Nanodegree</a>. It is a 6-9 months program with a mix of courses and reviewed projects. No previous knowledge is required (which was my case), and you end up with a good working knowledge of MVC frameworks.</div>
+                  <div>I was hooked by web development not long ago, but thanks to the online courses offered by Udacity I could rapidly learn and practice a variety of topics. Starting in 2015 I have followed Udacity's <a href="https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001" target="_blank">Front-End Web Development Nanodegree</a>. It is a 6-9 months program with a mix of courses and reviewed projects. No previous knowledge is required (which was my case), and you end up with a good working knowledge of MVC frameworks.</div>
                   <div>I consider myself lucky to live at a time where skilled people are bringing affordable high-quality education to the web, many thanks to them.</div>
+                </my-card>
+              </paper-material>
+
+              <paper-material elevation="0">
+                <my-card>
+                  <div class="title">Responsive Portofolio</div>
+                  <flip-card class="imageFlipCard" axis="x">
+                    <front>
+                      <iron-image src="images/webdev/portofolio-large.png"></iron-image>
+                      <div class="centering-container">
+                        <paper-material elevation="1">
+                          <iron-icon icon="my:turning"></iron-icon>
+                        </paper-material>
+                      </div>
+                    </front>
+                    <back>
+                      <div class="back-content">
+                        This project mainly consisted in:
+                        <ul class="goals-list">
+                          <li>Practicing <span class="primary">HTML</span> and <span class="primary">CSS</span> and using the Bootstrap framework to obtain a grid layout.</li>
+                          <li>Making the portofolio <span class="primary">responsive</span>.</li>
+                          <li>Getting acquainted with <span class="primary">build tools</span> to automatically process the images.</li>
+                        </ul>
+                        <div class="buttons-container">
+                          <a target="_blank" href="https://github.com/didaKtik/P1-Responsive-Portofolio">
+                            <paper-button raised class="primary-b">GitHub <iron-icon src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" alt="octocat" title="octocat"></iron-icon></paper-button>
+                          </a>
+                          <a target="_blank" href="projects/portofolio/index.html">
+                            <paper-button raised class="accent-b">Project <iron-icon icon="my:open-in-new"></iron-icon></paper-button>
+                          </a>
+                        </div>
+                        <hr>
+                        <span class="title">Udacity courses:</span>
+                        <a target="_blank" href="https://www.udacity.com/course/intro-to-html-and-css--ud304">Intro to HTML and CSS</a>,
+                        <a target="_blank" href="https://www.udacity.com/course/responsive-web-design-fundamentals--ud893">Responsive Web Design Fundamentals</a>,
+                        <a target="_blank" href="https://www.udacity.com/course/responsive-images--ud882">Responsive Images</a>
+                      </div>
+                    </back>
+                  </flip-card>
                 </my-card>
               </paper-material>
 
@@ -150,43 +214,179 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <div class="title">Interactive Resume</div>
                   <flip-card class="imageFlipCard" axis="x">
                     <front>
-                      <iron-image src="images/webdev/interactive-resume.png"></iron-image>
-                      <div class="centeringContainer">
+                      <iron-image src="images/webdev/interactive-resume-large.png"></iron-image>
+                      <div class="centering-container">
                         <paper-material elevation="1">
                           <iron-icon icon="my:turning"></iron-icon>
                         </paper-material>
                       </div>
                     </front>
                     <back>
-                      <div>Hello and welcome to my cave! It's more modern than Plato's one and uses a different technology, but it may not be so different after all...</div>
-                      <div> I am French, I live in Munich and I just finished <a href="https://www.linkedin.com/in/pierremohrdurdez" target="_blank">my studies</a>. I love people, growing brains and the Internet when it connects them. I am particularly fond of front-end development, for all the opportunities it gives to share thoughts, knowledge and fun with others.</div> 
-                      <div>Among the many things I would like to put on this page, I have only added the ones that don't fit on my CV for now, but more is to come. Happy clicking! (and hearing if you will in the top-left corner).</div>
-                      <div>Hello and welcome to my cave! It's more modern than Plato's one and uses a different technology, but it may not be so different after all...</div>
-                      <div> I am French, I live in Munich and I just finished <a href="https://www.linkedin.com/in/pierremohrdurdez" target="_blank">my studies</a>. I love people, growing brains and the Internet when it connects them. I am particularly fond of front-end development, for all the opportunities it gives to share thoughts, knowledge and fun with others.</div> 
-                      <div>Among the many things I would like to put on this page, I have only added the ones that don't fit on my CV for now, but more is to come. Happy clicking! (and hearing if you will in the top-left corner).</div>
+                      <div class="back-content">
+                        This project mainly consisted in:
+                        <ul class="goals-list">
+                          <li>Practicing <span class="primary">dom manipulations</span> in javascript and jQuery to make the resume interactive.</li>
+                          <li>Using the <span class="primary">Google Maps API</span> to display a map dynamically updated by the users actions.</li>
+                          <li>Using <span class="primary">d3.js</span> and the <span class="primary">canvas API</span> to draw a data-driven graph.</li>
+                        </ul>
+                        <div class="buttons-container">
+                          <a target="_blank" href="https://github.com/didaKtik/P2-Interactive-Resume">
+                            <paper-button raised class="primary-b">GitHub <iron-icon src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" alt="octocat" title="octocat"></iron-icon></paper-button>
+                          </a>
+                          <a target="_blank" href="projects/resume/index.html">
+                            <paper-button raised class="accent-b">Project <iron-icon icon="my:open-in-new"></iron-icon></paper-button>
+                          </a>
+                        </div>
+                        <hr>
+                        <span class="title">Udacity courses:</span>
+                        <a target="_blank" href="https://www.udacity.com/course/javascript-basics--ud804">JavaScript Basics</a>,
+                        <a target="_blank" href="https://www.udacity.com/course/intro-to-jquery--ud245">Intro to jQuery</a>,
+                        <a target="_blank" href="https://www.udacity.com/course/how-to-use-git-and-github--ud775">How to Use Git and GitHub</a>
+                      </div>
                     </back>
                   </flip-card>
                 </my-card>
               </paper-material>
 
               <paper-material elevation="0">
-                <my-card image="images/webdev/arcade-game.png">
+                <my-card>
                   <div class="title">Arcade Game</div>
-                  <div></div>
+                  <flip-card class="imageFlipCard" axis="x">
+                    <front>
+                      <iron-image src="images/webdev/arcade-game-large.png"></iron-image>
+                      <div class="centering-container">
+                        <paper-material elevation="1">
+                          <iron-icon icon="my:turning"></iron-icon>
+                        </paper-material>
+                      </div>
+                    </front>
+                    <back>
+                      <div class="back-content">
+                        This project mainly consisted in:
+                        <ul class="goals-list">
+                          <li>Understanding the logic and architecture of a <span class="primary">game engine</span> in Javascript.</li>
+                          <li>Coding the player and enemy classes in JavaScript's <span class="primary">object-oriented</span> pseudo-classical style.</li>
+                        </ul>
+                        <div class="buttons-container">
+                          <a target="_blank" href="https://github.com/didaKtik/P3-Arcade-Game">
+                            <paper-button raised class="primary-b">GitHub <iron-icon src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" alt="octocat" title="octocat"></iron-icon></paper-button>
+                          </a>
+                          <a target="_blank" href="projects/game/index.html">
+                            <paper-button raised class="accent-b">Project <iron-icon icon="my:open-in-new"></iron-icon></paper-button>
+                          </a>
+                        </div>
+                        <hr>
+                        <span class="title">Udacity courses:</span>
+                        <a target="_blank" href="https://www.udacity.com/course/object-oriented-javascript--ud015">Object-Oriented JavaScript</a>,
+                        <a target="_blank" href="https://www.udacity.com/course/html5-canvas--ud292">HTML5 Canvas</a>
+                      </div>
+                    </back>
+                  </flip-card>
                 </my-card>
               </paper-material>
 
               <paper-material elevation="0">
-                <my-card image="images/webdev/rendering-optimisation.png">
-                  <div class="title">Browser Rendering Optimisation</div>
-                  <div></div>
+                <my-card>
+                  <div class="title">Website Optimisation</div>
+                  <flip-card class="imageFlipCard" axis="x">
+                    <front>
+                      <iron-image src="images/webdev/rendering-optimisation-large.png"></iron-image>
+                      <div class="centering-container">
+                        <paper-material elevation="1">
+                          <iron-icon icon="my:turning"></iron-icon>
+                        </paper-material>
+                      </div>
+                    </front>
+                    <back>
+                      <div class="back-content">
+                        This project mainly consisted in:
+                        <ul class="goals-list">
+                          <li>Lightening the <span class="primary">critical rendering path</span> of index.html to achieve a PageSpeed score of 94/100 on mobile.</li>
+                          <li>Obtaining consistent <span class="primary">60 fps</span> when scrolling by avoiding layout trashing and unnecessary elements in javascript, and using 3D transforms in css.</li>
+                        </ul>
+                        <div class="buttons-container">
+                          <a target="_blank" href="https://github.com/didaKtik/P4-Brower-Rendering-Optimization">
+                            <paper-button raised class="primary-b">GitHub <iron-icon src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" alt="octocat" title="octocat"></iron-icon></paper-button>
+                          </a>
+                        </div>
+                        <hr>
+                        <span class="title">Udacity courses:</span>
+                        <a target="_blank" href="https://www.udacity.com/course/website-performance-optimization--ud884">Website Performance Optimization</a>,
+                        <a target="_blank" href="https://www.udacity.com/course/browser-rendering-optimization--ud860">Browser Rendering Optimization</a>
+                      </div>
+                    </back>
+                  </flip-card>
                 </my-card>
               </paper-material>
 
               <paper-material elevation="0">
-                <my-card image="images/webdev/rwanda-map.png">
+                <my-card>
                   <div class="title">Rwanda Map</div>
-                  <div></div>
+                  <flip-card class="imageFlipCard" axis="x">
+                    <front>
+                      <iron-image src="images/webdev/rwanda-map-large.png"></iron-image>
+                      <div class="centering-container">
+                        <paper-material elevation="1">
+                          <iron-icon icon="my:turning"></iron-icon>
+                        </paper-material>
+                      </div>
+                    </front>
+                    <back>
+                      <div class="back-content">
+                        This project mainly consisted in:
+                        <ul class="goals-list">
+                          <li>Creating a <span class="primary">single-page</span> map displaying a set of locations and making it possible to filter or add locations.</li>
+                          <li>Making <span class="primary">asynchronous queries</span> to Wikipedia to get additional informations about each location.</li>
+                          <li>Structure the application using <span class="primary">Knockout</span>'s implementation of the <span class="primary">MVC pattern</span>.</li>
+                        </ul>
+                        <div class="buttons-container">
+                          <a target="_blank" href="https://github.com/didaKtik/P5-Neighbourhood-Map">
+                            <paper-button raised class="primary-b">GitHub <iron-icon src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" alt="octocat" title="octocat"></iron-icon></paper-button>
+                          </a>
+                          <a target="_blank" href="projects/map/index.html">
+                            <paper-button raised class="accent-b">Project <iron-icon icon="my:open-in-new"></iron-icon></paper-button>
+                          </a>
+                        </div>
+                        <hr>
+                        <span class="title">Udacity courses:</span>
+                        <a target="_blank" href="https://www.udacity.com/course/intro-to-ajax--ud110">Intro to AJAX</a>,
+                        <a target="_blank" href="https://www.udacity.com/course/javascript-design-patterns--ud989">JavaScript Design Patterns</a>,
+                        <a target="_blank" href="https://www.udacity.com/course/learn-backbonejs--ud990">Learn Backbone.js</a>
+                      </div>
+                    </back>
+                  </flip-card>
+                </my-card>
+              </paper-material>
+
+              <paper-material elevation="0">
+                <my-card>
+                  <div class="title">Feed Reader Testing</div>
+                  <flip-card class="imageFlipCard" axis="x">
+                    <front>
+                      <iron-image src="images/webdev/testing-large.png"></iron-image>
+                      <div class="centering-container">
+                        <paper-material elevation="1">
+                          <iron-icon icon="my:turning"></iron-icon>
+                        </paper-material>
+                      </div>
+                    </front>
+                    <back>
+                      <div class="back-content">
+                        This project mainly consisted in:
+                        <ul class="goals-list">
+                          <li>Writing test suites with Jasmine.js to learn the basics of <span class="primary">testing</span>.</li>
+                        </ul>
+                        <div class="buttons-container">
+                          <a target="_blank" href="https://github.com/didaKtik/P6-Feed-Reader-Testing">
+                            <paper-button raised class="primary-b">GitHub <iron-icon src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" alt="octocat" title="octocat"></iron-icon></paper-button>
+                          </a>
+                        </div>
+                        <hr>
+                        <span class="title">Udacity courses:</span>
+                        <a target="_blank" href="https://www.udacity.com/course/javascript-testing--ud549">JavaScript Testing</a>
+                      </div>
+                    </back>
+                  </flip-card>
                 </my-card>
               </paper-material>
             </div>
@@ -194,7 +394,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <section data-route="transport">
             <paper-toolbar class="mainToolBar" data-route="transport">
-              <iron-image src="audio-images/home/transport-icon.png" preload fade></iron-image>
+              <iron-image src="audio_images/home/transport-icon.png" preload fade></iron-image>
               <span class="flexchild"></span>
               <div class='titles'>
                 <div class="greeting">In Transport</div>

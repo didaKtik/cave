@@ -6,6 +6,4 @@ app/**/bower_components
 .publish/
 *.md
 app/*images
-app/sounds
 app/test
-**/*.todo

@@ -10,6 +10,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 (function(document) {
   'use strict';
 
+  // see http://stackoverflow.com/a/9090128/640539
+  function transitionEndEventName() {
+    var i;
+    var el = document.createElement('div');
+    var transitions = {
+      'transition': 'transitionend',
+      'OTransition': 'otransitionend',
+      'MozTransition': 'transitionend',
+      'WebkitTransition': 'webkitTransitionEnd'
+    };
+
+    for (i in transitions) {
+      if (transitions.hasOwnProperty(i) && el.style[i] !== undefined) {
+        return transitions[i];
+      }
+    }
+  }
+
+  window.addEventListener('WebComponentsReady', function() {
+    var loadEl = document.getElementById('splash');
+    var transitionEndEvt = transitionEndEventName();
+    loadEl.addEventListener(transitionEndEvt, loadEl.remove);
+
+    document.body.classList.remove('loading');
+  });
+
   // Grab a reference to our auto-binding template
   var app = document.querySelector('#app');
 
@@ -36,17 +62,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   // See https://github.com/Polymer/polymer/issues/1381
   // Trigger when imports are loaded and elements have been registered
-  window.addEventListener('WebComponentsReady', function() {
-    // toggle fixed header based on screen size
-    // Broken since there are selectable neon-pages in the main panel
-    var panel = app.$.headerPanelMain;
-    var mquery = app.$.mquery;
-    mquery.addEventListener('query-matches-changed', function() {
-      panel.fixed = mquery.queryMatches;
-    });
-    console.log(mquery.queryMatches);
-    panel.fixed = mquery.queryMatches;
-  });
+  // window.addEventListener('WebComponentsReady', function() {
+  //   // toggle fixed header based on screen size
+  //   // Broken since there are selectable neon-pages in the main panel
+  //   var panel = app.$.headerPanelMain;
+  //   var mquery = app.$.mquery;
+  //   mquery.addEventListener('query-matches-changed', function() {
+  //     panel.fixed = mquery.queryMatches;
+  //   });
+  //   panel.fixed = mquery.queryMatches;
+  // });
 
   // Main area's paper-scroll-header-panel custom condensing transformation of
   // the appName in the middle-container and the bottom title in the bottom-container.

@@ -107,6 +107,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     color: var(--link-hover-color);
   }
 
+  hr {
+    margin: 0;
+    border-width: 2px 0 0 0;
+    border-style: solid;
+    color: #ddd;
+  }
+
   /* Drawer panel + main panel */
   paper-drawer-panel {
     max-width: 960px;
@@ -192,12 +199,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     margin: 0;
   }
 
-  .titles {
+  paper-toolbar .titles {
     text-align: center;
     margin: 0 5px;
   }
 
-  .greeting {
+  paper-toolbar .greeting {
     @apply(--paper-font-headline);
     font-size: 22px;
     font-weight: 500;
@@ -205,7 +212,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     padding: 0 0 10px 0;
   }
 
-  .subtitle {
+  paper-toolbar .subtitle {
     @apply(--paper-font-subhead);
     color: var(--secondary-text-color);
   }
@@ -222,8 +229,47 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   .imageFlipCard front iron-image {
-    --iron-image-width: 100%;
+    display: block;
+    max-width: 500px;
+    margin: 0 auto;
     border-radius: 10px;
+
+    --iron-image-width: 100%;
+  }
+
+  .back-content {
+    max-width: 550px;
+    margin: 0 auto;
+  }
+
+  .back-content hr {
+    border-style: dotted;
+    margin: 0 0 2px 0;
+  }
+
+  .imageFlipCard .goals-list {
+    padding-left: 10px;
+    margin-top: 5px;
+  }
+
+  .back-content .buttons-container {
+    @apply(--layout-horizontal);
+    @apply(--layout-around-justified);
+    margin: 0 0 10px 0;
+  }
+
+  .back-content .buttons-container a {
+    display: block;
+  }
+
+  .back-content paper-button {
+    color: white;
+    font-weight: 700;
+    text-transform: none;
+  }
+
+  .back-content .title {
+    font-weight: 500;
   }
 
   /* Warning dialog */
@@ -236,18 +282,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   /* Small mobile */
   @media (max-width: 360px) {
-    .greeting {
+    paper-toolbar .greeting {
       @apply(--paper-font-sm-title);
     }
 
-    .subtitle {
+    paper-toolbar .subtitle {
       @apply(--paper-font-sm-subhead);
     }
   }
 
   /* Tablet+ */
   @media (min-width: 601px) {
-    .greeting {
+    paper-toolbar .greeting {
       font-size: 26px;
     }
 
@@ -288,21 +334,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     @apply(--layout-wrap);
   }
 
-  .centeringContainer {
+  .centering-container {
     position: absolute;
     @apply(--layout-fit);
     @apply(--layout-horizontal);
     @apply(--layout-center-center);
   }
 
-  .centeringContainer iron-icon {
+  .centering-container iron-icon {
     color: var(--image-icon-color);
     --iron-icon-width: 30px;
     --iron-icon-height: 30px;
     opacity: 0.8;
   }
 
-  .centeringContainer iron-icon:hover {
+  .centering-container iron-icon:hover {
     color: var(--link-hover-color);
     opacity: 1;
   }
@@ -317,6 +363,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   .primary {
     color: var(--primary-color);
+  }
+
+  .primary-b {
+    background-color: var(--primary-color);
+  }
+
+  .accent-b {
+    background-color: var(--accent-color);
+  }
+
+  .text-center {
+    width: 100%;
+    text-align: center;
   }
 
   /* Material Design Adaptive Breakpoints */

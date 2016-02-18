@@ -9078,460 +9078,139 @@ this.fire('dom-change');
     }());
   </script>
 </dom-module>
-
-
-<script>
-
-  (function() {
-
-    // monostate data
-    var metaDatas = {};
-    var metaArrays = {};
-    var singleton = null;
-
-    Polymer.IronMeta = Polymer({
-
-      is: 'iron-meta',
-
-      properties: {
-
-        /**
-         * The type of meta-data.  All meta-data of the same type is stored
-         * together.
-         */
-        type: {
-          type: String,
-          value: 'default',
-          observer: '_typeChanged'
-        },
-
-        /**
-         * The key used to store `value` under the `type` namespace.
-         */
-        key: {
-          type: String,
-          observer: '_keyChanged'
-        },
-
-        /**
-         * The meta-data to store or retrieve.
-         */
-        value: {
-          type: Object,
-          notify: true,
-          observer: '_valueChanged'
-        },
-
-        /**
-         * If true, `value` is set to the iron-meta instance itself.
-         */
-         self: {
-          type: Boolean,
-          observer: '_selfChanged'
-        },
-
-        /**
-         * Array of all meta-data values for the given type.
-         */
-        list: {
-          type: Array,
-          notify: true
-        }
-
-      },
-
-      hostAttributes: {
-        hidden: true
-      },
-
-      /**
-       * Only runs if someone invokes the factory/constructor directly
-       * e.g. `new Polymer.IronMeta()`
-       *
-       * @param {{type: (string|undefined), key: (string|undefined), value}=} config
-       */
-      factoryImpl: function(config) {
-        if (config) {
-          for (var n in config) {
-            switch(n) {
-              case 'type':
-              case 'key':
-              case 'value':
-                this[n] = config[n];
-                break;
-            }
-          }
-        }
-      },
-
-      created: function() {
-        // TODO(sjmiles): good for debugging?
-        this._metaDatas = metaDatas;
-        this._metaArrays = metaArrays;
-      },
-
-      _keyChanged: function(key, old) {
-        this._resetRegistration(old);
-      },
-
-      _valueChanged: function(value) {
-        this._resetRegistration(this.key);
-      },
-
-      _selfChanged: function(self) {
-        if (self) {
-          this.value = this;
-        }
-      },
-
-      _typeChanged: function(type) {
-        this._unregisterKey(this.key);
-        if (!metaDatas[type]) {
-          metaDatas[type] = {};
-        }
-        this._metaData = metaDatas[type];
-        if (!metaArrays[type]) {
-          metaArrays[type] = [];
-        }
-        this.list = metaArrays[type];
-        this._registerKeyValue(this.key, this.value);
-      },
-
-      /**
-       * Retrieves meta data value by key.
-       *
-       * @method byKey
-       * @param {string} key The key of the meta-data to be returned.
-       * @return {*}
-       */
-      byKey: function(key) {
-        return this._metaData && this._metaData[key];
-      },
-
-      _resetRegistration: function(oldKey) {
-        this._unregisterKey(oldKey);
-        this._registerKeyValue(this.key, this.value);
-      },
-
-      _unregisterKey: function(key) {
-        this._unregister(key, this._metaData, this.list);
-      },
-
-      _registerKeyValue: function(key, value) {
-        this._register(key, value, this._metaData, this.list);
-      },
-
-      _register: function(key, value, data, list) {
-        if (key && data && value !== undefined) {
-          data[key] = value;
-          list.push(value);
-        }
-      },
-
-      _unregister: function(key, data, list) {
-        if (key && data) {
-          if (key in data) {
-            var value = data[key];
-            delete data[key];
-            this.arrayDelete(list, value);
-          }
-        }
-      }
-
-    });
-
-    Polymer.IronMeta.getIronMeta = function getIronMeta() {
-       if (singleton === null) {
-         singleton = new Polymer.IronMeta();
-       }
-       return singleton;
-     };
-
-    /**
-    `iron-meta-query` can be used to access infomation stored in `iron-meta`.
-
-    Examples:
-
-    If I create an instance like this:
-
-        <iron-meta key="info" value="foo/bar"></iron-meta>
-
-    Note that value="foo/bar" is the metadata I've defined. I could define more
-    attributes or use child nodes to define additional metadata.
-
-    Now I can access that element (and it's metadata) from any `iron-meta-query` instance:
-
-         var value = new Polymer.IronMetaQuery({key: 'info'}).value;
-
-    @group Polymer Iron Elements
-    @element iron-meta-query
-    */
-    Polymer.IronMetaQuery = Polymer({
-
-      is: 'iron-meta-query',
-
-      properties: {
-
-        /**
-         * The type of meta-data.  All meta-data of the same type is stored
-         * together.
-         */
-        type: {
-          type: String,
-          value: 'default',
-          observer: '_typeChanged'
-        },
-
-        /**
-         * Specifies a key to use for retrieving `value` from the `type`
-         * namespace.
-         */
-        key: {
-          type: String,
-          observer: '_keyChanged'
-        },
-
-        /**
-         * The meta-data to store or retrieve.
-         */
-        value: {
-          type: Object,
-          notify: true,
-          readOnly: true
-        },
-
-        /**
-         * Array of all meta-data values for the given type.
-         */
-        list: {
-          type: Array,
-          notify: true
-        }
-
-      },
-
-      /**
-       * Actually a factory method, not a true constructor. Only runs if
-       * someone invokes it directly (via `new Polymer.IronMeta()`);
-       *
-       * @param {{type: (string|undefined), key: (string|undefined)}=} config
-       */
-      factoryImpl: function(config) {
-        if (config) {
-          for (var n in config) {
-            switch(n) {
-              case 'type':
-              case 'key':
-                this[n] = config[n];
-                break;
-            }
-          }
-        }
-      },
-
-      created: function() {
-        // TODO(sjmiles): good for debugging?
-        this._metaDatas = metaDatas;
-        this._metaArrays = metaArrays;
-      },
-
-      _keyChanged: function(key) {
-        this._setValue(this._metaData && this._metaData[key]);
-      },
-
-      _typeChanged: function(type) {
-        this._metaData = metaDatas[type];
-        this.list = metaArrays[type];
-        if (this.key) {
-          this._keyChanged(this.key);
-        }
-      },
-
-      /**
-       * Retrieves meta data value by key.
-       * @param {string} key The key of the meta-data to be returned.
-       * @return {*}
-       */
-      byKey: function(key) {
-        return this._metaData && this._metaData[key];
-      }
-
-    });
-
-  })();
-</script>
-
-
-<dom-module id="iron-icon" assetpath="../bower_components/iron-icon/">
-
-  <style>
-    :host {
-      @apply(--layout-inline);
-      @apply(--layout-center-center);
-      position: relative;
-
-      vertical-align: middle;
-
-      fill: var(--iron-icon-fill-color, currentcolor);
-      stroke: var(--iron-icon-stroke-color, none);
-
-      width: var(--iron-icon-width, 24px);
-      height: var(--iron-icon-height, 24px);
-    }
-  </style>
-
-  <template>
-  </template>
-
-  <script>
-
-    Polymer({
-
-      is: 'iron-icon',
-
-      properties: {
-
-        /**
-         * The name of the icon to use. The name should be of the form:
-         * `iconset_name:icon_name`.
-         */
-        icon: {
-          type: String,
-          observer: '_iconChanged'
-        },
-
-        /**
-         * The name of the theme to used, if one is specified by the
-         * iconset.
-         */
-        theme: {
-          type: String,
-          observer: '_updateIcon'
-        },
-
-        /**
-         * If using iron-icon without an iconset, you can set the src to be
-         * the URL of an individual icon image file. Note that this will take
-         * precedence over a given icon attribute.
-         */
-        src: {
-          type: String,
-          observer: '_srcChanged'
-        },
-
-        /**
-         * @type {!Polymer.IronMeta}
-         */
-        _meta: {
-          value: Polymer.Base.create('iron-meta', {type: 'iconset'})
-        }
-
-      },
-
-      _DEFAULT_ICONSET: 'icons',
-
-      _iconChanged: function(icon) {
-        var parts = (icon || '').split(':');
-        this._iconName = parts.pop();
-        this._iconsetName = parts.pop() || this._DEFAULT_ICONSET;
-        this._updateIcon();
-      },
-
-      _srcChanged: function(src) {
-        this._updateIcon();
-      },
-
-      _usesIconset: function() {
-        return this.icon || !this.src;
-      },
-
-      /** @suppress {visibility} */
-      _updateIcon: function() {
-        if (this._usesIconset()) {
-          if (this._iconsetName) {
-            this._iconset = /** @type {?Polymer.Iconset} */ (
-              this._meta.byKey(this._iconsetName));
-            if (this._iconset) {
-              this._iconset.applyIcon(this, this._iconName, this.theme);
-              this.unlisten(window, 'iron-iconset-added', '_updateIcon');
-            } else {
-              this.listen(window, 'iron-iconset-added', '_updateIcon');
-            }
-          }
-        } else {
-          if (!this._img) {
-            this._img = document.createElement('img');
-            this._img.style.width = '100%';
-            this._img.style.height = '100%';
-            this._img.draggable = false;
-          }
-          this._img.src = this.src;
-          Polymer.dom(this.root).appendChild(this._img);
-        }
-      }
-
-    });
-
-  </script>
-
-</dom-module>
-
-
 <style is="custom-style">
 
   :root {
-    /*
-     * You can use these generic variables in your elements for easy theming.
-     * For example, if all your elements use `--primary-text-color` as its main
-     * color, then switching from a light to a dark theme is just a matter of
-     * changing the value of `--primary-text-color` in your application.
-     */
-    --primary-text-color: var(--light-theme-text-color);
-    --primary-background-color: var(--light-theme-background-color);
-    --secondary-text-color: var(--light-theme-secondary-color);
-    --disabled-text-color: var(--light-theme-disabled-color);
-    --divider-color: var(--light-theme-divider-color);
 
-    /*
-     * Primary and accent colors. Also see color.html for more colors.
-     */
-    --primary-color: #3f51b5;  /* --paper-indigo-500 */
-    --light-primary-color: #c5cae9;  /* --paper-indigo-100 */
-    --dark-primary-color: #303f9f;  /* --paper-indigo-700 */
+    --shadow-transition: {
+      transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    };
 
-    --accent-color: #ff4081;  /* --paper-pink-a200 */
-    --light-accent-color: #ff80ab;  /* --paper-pink-a100 */
-    --dark-accent-color: #f50057;  /* --paper-pink-a400 */
+    --shadow-none: {
+      box-shadow: none;
+    };
 
-    /*
-     * Material Design Light background theme
-     */
-    --light-theme-background-color: #ffffff;
-    --light-theme-base-color: #000000;
-    --light-theme-text-color: #212121;
-    --light-theme-secondary-color: #737373;  /* for secondary text and icons */
-    --light-theme-disabled-color: #9b9b9b;  /* disabled/hint text */
-    --light-theme-divider-color: #dbdbdb;
+    /* from http://codepen.io/shyndman/pen/c5394ddf2e8b2a5c9185904b57421cdb */
 
-    /*
-     * Material Design Dark background theme
-     */
-    --dark-theme-background-color: #212121;
-    --dark-theme-base-color: #ffffff;
-    --dark-theme-text-color: #ffffff;
-    --dark-theme-secondary-color: #bcbcbc;  /* for secondary text and icons */
-    --dark-theme-disabled-color: #646464;  /* disabled/hint text */
-    --dark-theme-divider-color: #3c3c3c;
+    --shadow-elevation-2dp: {
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 5px 0 rgba(0, 0, 0, 0.12),
+                  0 3px 1px -2px rgba(0, 0, 0, 0.2);
+    };
 
-    /*
-     * Deprecated values because of their confusing names.
-     */
-    --text-primary-color: var(--dark-theme-text-color);
-    --default-primary-color: var(--primary-color);
+    --shadow-elevation-3dp: {
+      box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 8px 0 rgba(0, 0, 0, 0.12),
+                  0 3px 3px -2px rgba(0, 0, 0, 0.4);
+    };
+
+    --shadow-elevation-4dp: {
+      box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 10px 0 rgba(0, 0, 0, 0.12),
+                  0 2px 4px -1px rgba(0, 0, 0, 0.4);
+    };
+
+    --shadow-elevation-6dp: {
+      box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 18px 0 rgba(0, 0, 0, 0.12),
+                  0 3px 5px -1px rgba(0, 0, 0, 0.4);
+    };
+
+    --shadow-elevation-8dp: {
+      box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                  0 3px 14px 2px rgba(0, 0, 0, 0.12),
+                  0 5px 5px -3px rgba(0, 0, 0, 0.4);
+    };
+
+    --shadow-elevation-16dp: {
+      box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
+                  0  6px 30px 5px rgba(0, 0, 0, 0.12),
+                  0  8px 10px -5px rgba(0, 0, 0, 0.4);
+    };
 
   }
 
 </style>
+<dom-module id="paper-material-shared-styles" assetpath="../bower_components/paper-material/">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+      }
+
+      :host([elevation="1"]) {
+        @apply(--shadow-elevation-2dp);
+      }
+
+      :host([elevation="2"]) {
+        @apply(--shadow-elevation-4dp);
+      }
+
+      :host([elevation="3"]) {
+        @apply(--shadow-elevation-6dp);
+      }
+
+      :host([elevation="4"]) {
+        @apply(--shadow-elevation-8dp);
+      }
+
+      :host([elevation="5"]) {
+        @apply(--shadow-elevation-16dp);
+      }
+    </style>
+  </template>
+</dom-module>
+
+
+<dom-module id="paper-material" assetpath="../bower_components/paper-material/">
+  <template>
+    <style include="paper-material-shared-styles"></style>
+    <style>
+      :host([animated]) {
+        @apply(--shadow-transition);
+      }
+    </style>
+
+    <content></content>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: 'paper-material',
+
+    properties: {
+      /**
+       * The z-depth of this element, from 0-5. Setting to 0 will remove the
+       * shadow, and each increasing number greater than 0 will be "deeper"
+       * than the last.
+       *
+       * @attribute elevation
+       * @type number
+       * @default 1
+       */
+      elevation: {
+        type: Number,
+        reflectToAttribute: true,
+        value: 1
+      },
+
+      /**
+       * Set this to true to animate the shadow when setting a new
+       * `elevation` value.
+       *
+       * @attribute animated
+       * @type boolean
+       * @default false
+       */
+      animated: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: false
+      }
+    }
+  });
+</script>
 <script>
   (function() {
     'use strict';
@@ -9965,314 +9644,6 @@ this.fire('dom-change');
       }
     };
   })();
-</script>
-<script>
-
-  /**
-   * @demo demo/index.html
-   * @polymerBehavior
-   */
-  Polymer.IronControlState = {
-
-    properties: {
-
-      /**
-       * If true, the element currently has focus.
-       */
-      focused: {
-        type: Boolean,
-        value: false,
-        notify: true,
-        readOnly: true,
-        reflectToAttribute: true
-      },
-
-      /**
-       * If true, the user cannot interact with this element.
-       */
-      disabled: {
-        type: Boolean,
-        value: false,
-        notify: true,
-        observer: '_disabledChanged',
-        reflectToAttribute: true
-      },
-
-      _oldTabIndex: {
-        type: Number
-      },
-
-      _boundFocusBlurHandler: {
-        type: Function,
-        value: function() {
-          return this._focusBlurHandler.bind(this);
-        }
-      }
-
-    },
-
-    observers: [
-      '_changedControlState(focused, disabled)'
-    ],
-
-    ready: function() {
-      this.addEventListener('focus', this._boundFocusBlurHandler, true);
-      this.addEventListener('blur', this._boundFocusBlurHandler, true);
-    },
-
-    _focusBlurHandler: function(event) {
-      // NOTE(cdata):  if we are in ShadowDOM land, `event.target` will
-      // eventually become `this` due to retargeting; if we are not in
-      // ShadowDOM land, `event.target` will eventually become `this` due
-      // to the second conditional which fires a synthetic event (that is also
-      // handled). In either case, we can disregard `event.path`.
-
-      if (event.target === this) {
-        this._setFocused(event.type === 'focus');
-      } else if (!this.shadowRoot && !this.isLightDescendant(event.target)) {
-        this.fire(event.type, {sourceEvent: event}, {
-          node: this,
-          bubbles: event.bubbles,
-          cancelable: event.cancelable
-        });
-      }
-    },
-
-    _disabledChanged: function(disabled, old) {
-      this.setAttribute('aria-disabled', disabled ? 'true' : 'false');
-      this.style.pointerEvents = disabled ? 'none' : '';
-      if (disabled) {
-        this._oldTabIndex = this.tabIndex;
-        this.focused = false;
-        this.tabIndex = -1;
-      } else if (this._oldTabIndex !== undefined) {
-        this.tabIndex = this._oldTabIndex;
-      }
-    },
-
-    _changedControlState: function() {
-      // _controlStateChanged is abstract, follow-on behaviors may implement it
-      if (this._controlStateChanged) {
-        this._controlStateChanged();
-      }
-    }
-
-  };
-
-</script>
-<script>
-
-  /**
-   * @demo demo/index.html
-   * @polymerBehavior Polymer.IronButtonState
-   */
-  Polymer.IronButtonStateImpl = {
-
-    properties: {
-
-      /**
-       * If true, the user is currently holding down the button.
-       */
-      pressed: {
-        type: Boolean,
-        readOnly: true,
-        value: false,
-        reflectToAttribute: true,
-        observer: '_pressedChanged'
-      },
-
-      /**
-       * If true, the button toggles the active state with each tap or press
-       * of the spacebar.
-       */
-      toggles: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
-
-      /**
-       * If true, the button is a toggle and is currently in the active state.
-       */
-      active: {
-        type: Boolean,
-        value: false,
-        notify: true,
-        reflectToAttribute: true
-      },
-
-      /**
-       * True if the element is currently being pressed by a "pointer," which
-       * is loosely defined as mouse or touch input (but specifically excluding
-       * keyboard input).
-       */
-      pointerDown: {
-        type: Boolean,
-        readOnly: true,
-        value: false
-      },
-
-      /**
-       * True if the input device that caused the element to receive focus
-       * was a keyboard.
-       */
-      receivedFocusFromKeyboard: {
-        type: Boolean,
-        readOnly: true
-      },
-
-      /**
-       * The aria attribute to be set if the button is a toggle and in the
-       * active state.
-       */
-      ariaActiveAttribute: {
-        type: String,
-        value: 'aria-pressed',
-        observer: '_ariaActiveAttributeChanged'
-      }
-    },
-
-    listeners: {
-      down: '_downHandler',
-      up: '_upHandler',
-      tap: '_tapHandler'
-    },
-
-    observers: [
-      '_detectKeyboardFocus(focused)',
-      '_activeChanged(active, ariaActiveAttribute)'
-    ],
-
-    keyBindings: {
-      'enter:keydown': '_asyncClick',
-      'space:keydown': '_spaceKeyDownHandler',
-      'space:keyup': '_spaceKeyUpHandler',
-    },
-
-    _mouseEventRe: /^mouse/,
-
-    _tapHandler: function() {
-      if (this.toggles) {
-       // a tap is needed to toggle the active state
-        this._userActivate(!this.active);
-      } else {
-        this.active = false;
-      }
-    },
-
-    _detectKeyboardFocus: function(focused) {
-      this._setReceivedFocusFromKeyboard(!this.pointerDown && focused);
-    },
-
-    // to emulate native checkbox, (de-)activations from a user interaction fire
-    // 'change' events
-    _userActivate: function(active) {
-      if (this.active !== active) {
-        this.active = active;
-        this.fire('change');
-      }
-    },
-
-    _downHandler: function(event) {
-      this._setPointerDown(true);
-      this._setPressed(true);
-      this._setReceivedFocusFromKeyboard(false);
-    },
-
-    _upHandler: function() {
-      this._setPointerDown(false);
-      this._setPressed(false);
-    },
-
-    /**
-     * @param {!KeyboardEvent} event .
-     */
-    _spaceKeyDownHandler: function(event) {
-      var keyboardEvent = event.detail.keyboardEvent;
-      var target = Polymer.dom(keyboardEvent).localTarget;
-
-      // Ignore the event if this is coming from a focused light child, since that
-      // element will deal with it.
-      if (this.isLightDescendant(/** @type {Node} */(target)))
-        return;
-
-      keyboardEvent.preventDefault();
-      keyboardEvent.stopImmediatePropagation();
-      this._setPressed(true);
-    },
-
-    /**
-     * @param {!KeyboardEvent} event .
-     */
-    _spaceKeyUpHandler: function(event) {
-      var keyboardEvent = event.detail.keyboardEvent;
-      var target = Polymer.dom(keyboardEvent).localTarget;
-
-      // Ignore the event if this is coming from a focused light child, since that
-      // element will deal with it.
-      if (this.isLightDescendant(/** @type {Node} */(target)))
-        return;
-
-      if (this.pressed) {
-        this._asyncClick();
-      }
-      this._setPressed(false);
-    },
-
-    // trigger click asynchronously, the asynchrony is useful to allow one
-    // event handler to unwind before triggering another event
-    _asyncClick: function() {
-      this.async(function() {
-        this.click();
-      }, 1);
-    },
-
-    // any of these changes are considered a change to button state
-
-    _pressedChanged: function(pressed) {
-      this._changedButtonState();
-    },
-
-    _ariaActiveAttributeChanged: function(value, oldValue) {
-      if (oldValue && oldValue != value && this.hasAttribute(oldValue)) {
-        this.removeAttribute(oldValue);
-      }
-    },
-
-    _activeChanged: function(active, ariaActiveAttribute) {
-      if (this.toggles) {
-        this.setAttribute(this.ariaActiveAttribute,
-                          active ? 'true' : 'false');
-      } else {
-        this.removeAttribute(this.ariaActiveAttribute);
-      }
-      this._changedButtonState();
-    },
-
-    _controlStateChanged: function() {
-      if (this.disabled) {
-        this._setPressed(false);
-      } else {
-        this._changedButtonState();
-      }
-    },
-
-    // provide hook for follow-on behaviors to react to button-state
-
-    _changedButtonState: function() {
-      if (this._buttonStateChanged) {
-        this._buttonStateChanged(); // abstract
-      }
-    }
-
-  };
-
-  /** @polymerBehavior */
-  Polymer.IronButtonState = [
-    Polymer.IronA11yKeysBehavior,
-    Polymer.IronButtonStateImpl
-  ];
-
 </script>
 
 
@@ -10954,6 +10325,314 @@ this.fire('dom-change');
 <script>
 
   /**
+   * @demo demo/index.html
+   * @polymerBehavior
+   */
+  Polymer.IronControlState = {
+
+    properties: {
+
+      /**
+       * If true, the element currently has focus.
+       */
+      focused: {
+        type: Boolean,
+        value: false,
+        notify: true,
+        readOnly: true,
+        reflectToAttribute: true
+      },
+
+      /**
+       * If true, the user cannot interact with this element.
+       */
+      disabled: {
+        type: Boolean,
+        value: false,
+        notify: true,
+        observer: '_disabledChanged',
+        reflectToAttribute: true
+      },
+
+      _oldTabIndex: {
+        type: Number
+      },
+
+      _boundFocusBlurHandler: {
+        type: Function,
+        value: function() {
+          return this._focusBlurHandler.bind(this);
+        }
+      }
+
+    },
+
+    observers: [
+      '_changedControlState(focused, disabled)'
+    ],
+
+    ready: function() {
+      this.addEventListener('focus', this._boundFocusBlurHandler, true);
+      this.addEventListener('blur', this._boundFocusBlurHandler, true);
+    },
+
+    _focusBlurHandler: function(event) {
+      // NOTE(cdata):  if we are in ShadowDOM land, `event.target` will
+      // eventually become `this` due to retargeting; if we are not in
+      // ShadowDOM land, `event.target` will eventually become `this` due
+      // to the second conditional which fires a synthetic event (that is also
+      // handled). In either case, we can disregard `event.path`.
+
+      if (event.target === this) {
+        this._setFocused(event.type === 'focus');
+      } else if (!this.shadowRoot && !this.isLightDescendant(event.target)) {
+        this.fire(event.type, {sourceEvent: event}, {
+          node: this,
+          bubbles: event.bubbles,
+          cancelable: event.cancelable
+        });
+      }
+    },
+
+    _disabledChanged: function(disabled, old) {
+      this.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+      this.style.pointerEvents = disabled ? 'none' : '';
+      if (disabled) {
+        this._oldTabIndex = this.tabIndex;
+        this.focused = false;
+        this.tabIndex = -1;
+      } else if (this._oldTabIndex !== undefined) {
+        this.tabIndex = this._oldTabIndex;
+      }
+    },
+
+    _changedControlState: function() {
+      // _controlStateChanged is abstract, follow-on behaviors may implement it
+      if (this._controlStateChanged) {
+        this._controlStateChanged();
+      }
+    }
+
+  };
+
+</script>
+<script>
+
+  /**
+   * @demo demo/index.html
+   * @polymerBehavior Polymer.IronButtonState
+   */
+  Polymer.IronButtonStateImpl = {
+
+    properties: {
+
+      /**
+       * If true, the user is currently holding down the button.
+       */
+      pressed: {
+        type: Boolean,
+        readOnly: true,
+        value: false,
+        reflectToAttribute: true,
+        observer: '_pressedChanged'
+      },
+
+      /**
+       * If true, the button toggles the active state with each tap or press
+       * of the spacebar.
+       */
+      toggles: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+
+      /**
+       * If true, the button is a toggle and is currently in the active state.
+       */
+      active: {
+        type: Boolean,
+        value: false,
+        notify: true,
+        reflectToAttribute: true
+      },
+
+      /**
+       * True if the element is currently being pressed by a "pointer," which
+       * is loosely defined as mouse or touch input (but specifically excluding
+       * keyboard input).
+       */
+      pointerDown: {
+        type: Boolean,
+        readOnly: true,
+        value: false
+      },
+
+      /**
+       * True if the input device that caused the element to receive focus
+       * was a keyboard.
+       */
+      receivedFocusFromKeyboard: {
+        type: Boolean,
+        readOnly: true
+      },
+
+      /**
+       * The aria attribute to be set if the button is a toggle and in the
+       * active state.
+       */
+      ariaActiveAttribute: {
+        type: String,
+        value: 'aria-pressed',
+        observer: '_ariaActiveAttributeChanged'
+      }
+    },
+
+    listeners: {
+      down: '_downHandler',
+      up: '_upHandler',
+      tap: '_tapHandler'
+    },
+
+    observers: [
+      '_detectKeyboardFocus(focused)',
+      '_activeChanged(active, ariaActiveAttribute)'
+    ],
+
+    keyBindings: {
+      'enter:keydown': '_asyncClick',
+      'space:keydown': '_spaceKeyDownHandler',
+      'space:keyup': '_spaceKeyUpHandler',
+    },
+
+    _mouseEventRe: /^mouse/,
+
+    _tapHandler: function() {
+      if (this.toggles) {
+       // a tap is needed to toggle the active state
+        this._userActivate(!this.active);
+      } else {
+        this.active = false;
+      }
+    },
+
+    _detectKeyboardFocus: function(focused) {
+      this._setReceivedFocusFromKeyboard(!this.pointerDown && focused);
+    },
+
+    // to emulate native checkbox, (de-)activations from a user interaction fire
+    // 'change' events
+    _userActivate: function(active) {
+      if (this.active !== active) {
+        this.active = active;
+        this.fire('change');
+      }
+    },
+
+    _downHandler: function(event) {
+      this._setPointerDown(true);
+      this._setPressed(true);
+      this._setReceivedFocusFromKeyboard(false);
+    },
+
+    _upHandler: function() {
+      this._setPointerDown(false);
+      this._setPressed(false);
+    },
+
+    /**
+     * @param {!KeyboardEvent} event .
+     */
+    _spaceKeyDownHandler: function(event) {
+      var keyboardEvent = event.detail.keyboardEvent;
+      var target = Polymer.dom(keyboardEvent).localTarget;
+
+      // Ignore the event if this is coming from a focused light child, since that
+      // element will deal with it.
+      if (this.isLightDescendant(/** @type {Node} */(target)))
+        return;
+
+      keyboardEvent.preventDefault();
+      keyboardEvent.stopImmediatePropagation();
+      this._setPressed(true);
+    },
+
+    /**
+     * @param {!KeyboardEvent} event .
+     */
+    _spaceKeyUpHandler: function(event) {
+      var keyboardEvent = event.detail.keyboardEvent;
+      var target = Polymer.dom(keyboardEvent).localTarget;
+
+      // Ignore the event if this is coming from a focused light child, since that
+      // element will deal with it.
+      if (this.isLightDescendant(/** @type {Node} */(target)))
+        return;
+
+      if (this.pressed) {
+        this._asyncClick();
+      }
+      this._setPressed(false);
+    },
+
+    // trigger click asynchronously, the asynchrony is useful to allow one
+    // event handler to unwind before triggering another event
+    _asyncClick: function() {
+      this.async(function() {
+        this.click();
+      }, 1);
+    },
+
+    // any of these changes are considered a change to button state
+
+    _pressedChanged: function(pressed) {
+      this._changedButtonState();
+    },
+
+    _ariaActiveAttributeChanged: function(value, oldValue) {
+      if (oldValue && oldValue != value && this.hasAttribute(oldValue)) {
+        this.removeAttribute(oldValue);
+      }
+    },
+
+    _activeChanged: function(active, ariaActiveAttribute) {
+      if (this.toggles) {
+        this.setAttribute(this.ariaActiveAttribute,
+                          active ? 'true' : 'false');
+      } else {
+        this.removeAttribute(this.ariaActiveAttribute);
+      }
+      this._changedButtonState();
+    },
+
+    _controlStateChanged: function() {
+      if (this.disabled) {
+        this._setPressed(false);
+      } else {
+        this._changedButtonState();
+      }
+    },
+
+    // provide hook for follow-on behaviors to react to button-state
+
+    _changedButtonState: function() {
+      if (this._buttonStateChanged) {
+        this._buttonStateChanged(); // abstract
+      }
+    }
+
+  };
+
+  /** @polymerBehavior */
+  Polymer.IronButtonState = [
+    Polymer.IronA11yKeysBehavior,
+    Polymer.IronButtonStateImpl
+  ];
+
+</script>
+<script>
+
+  /**
    * `Polymer.PaperRippleBehavior` dynamically implements a ripple
    * when the element has focus via pointer or keyboard.
    *
@@ -11156,6 +10835,558 @@ this.fire('dom-change');
   ];
 
 </script>
+
+
+<dom-module id="paper-button" assetpath="../bower_components/paper-button/">
+  <template strip-whitespace="">
+
+    <style include="paper-material">
+      :host {
+        display: inline-block;
+        position: relative;
+        box-sizing: border-box;
+        min-width: 5.14em;
+        margin: 0 0.29em;
+        background: transparent;
+        text-align: center;
+        font: inherit;
+        text-transform: uppercase;
+        outline-width: 0;
+        border-radius: 3px;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: pointer;
+        z-index: 0;
+        padding: 0.7em 0.57em;
+
+        @apply(--paper-button);
+      }
+
+      :host([raised].keyboard-focus) {
+        font-weight: bold;
+        @apply(--paper-button-raised-keyboard-focus);
+      }
+
+      :host(:not([raised]).keyboard-focus) {
+        font-weight: bold;
+        @apply(--paper-button-flat-keyboard-focus);
+      }
+
+      :host([disabled]) {
+        background: #eaeaea;
+        color: #a8a8a8;
+        cursor: auto;
+        pointer-events: none;
+
+        @apply(--paper-button-disabled);
+      }
+
+      paper-ripple {
+        color: var(--paper-button-ink-color);
+      }
+
+      :host > ::content * {
+        text-transform: inherit;
+      }
+    </style>
+    <content></content>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'paper-button',
+
+    behaviors: [
+      Polymer.PaperButtonBehavior
+    ],
+
+    properties: {
+      /**
+       * If true, the button should be styled with a shadow.
+       */
+      raised: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: false,
+        observer: '_calculateElevation'
+      }
+    },
+
+    _calculateElevation: function() {
+      if (!this.raised) {
+        this._setElevation(0);
+      } else {
+        Polymer.PaperButtonBehaviorImpl._calculateElevation.apply(this);
+      }
+    }
+    /**
+
+    Fired when the animation finishes.
+    This is useful if you want to wait until
+    the ripple animation finishes to perform some action.
+
+    @event transitionend
+    @param {{node: Object}} detail Contains the animated node.
+    */
+  });
+</script>
+
+
+<script>
+
+  (function() {
+
+    // monostate data
+    var metaDatas = {};
+    var metaArrays = {};
+    var singleton = null;
+
+    Polymer.IronMeta = Polymer({
+
+      is: 'iron-meta',
+
+      properties: {
+
+        /**
+         * The type of meta-data.  All meta-data of the same type is stored
+         * together.
+         */
+        type: {
+          type: String,
+          value: 'default',
+          observer: '_typeChanged'
+        },
+
+        /**
+         * The key used to store `value` under the `type` namespace.
+         */
+        key: {
+          type: String,
+          observer: '_keyChanged'
+        },
+
+        /**
+         * The meta-data to store or retrieve.
+         */
+        value: {
+          type: Object,
+          notify: true,
+          observer: '_valueChanged'
+        },
+
+        /**
+         * If true, `value` is set to the iron-meta instance itself.
+         */
+         self: {
+          type: Boolean,
+          observer: '_selfChanged'
+        },
+
+        /**
+         * Array of all meta-data values for the given type.
+         */
+        list: {
+          type: Array,
+          notify: true
+        }
+
+      },
+
+      hostAttributes: {
+        hidden: true
+      },
+
+      /**
+       * Only runs if someone invokes the factory/constructor directly
+       * e.g. `new Polymer.IronMeta()`
+       *
+       * @param {{type: (string|undefined), key: (string|undefined), value}=} config
+       */
+      factoryImpl: function(config) {
+        if (config) {
+          for (var n in config) {
+            switch(n) {
+              case 'type':
+              case 'key':
+              case 'value':
+                this[n] = config[n];
+                break;
+            }
+          }
+        }
+      },
+
+      created: function() {
+        // TODO(sjmiles): good for debugging?
+        this._metaDatas = metaDatas;
+        this._metaArrays = metaArrays;
+      },
+
+      _keyChanged: function(key, old) {
+        this._resetRegistration(old);
+      },
+
+      _valueChanged: function(value) {
+        this._resetRegistration(this.key);
+      },
+
+      _selfChanged: function(self) {
+        if (self) {
+          this.value = this;
+        }
+      },
+
+      _typeChanged: function(type) {
+        this._unregisterKey(this.key);
+        if (!metaDatas[type]) {
+          metaDatas[type] = {};
+        }
+        this._metaData = metaDatas[type];
+        if (!metaArrays[type]) {
+          metaArrays[type] = [];
+        }
+        this.list = metaArrays[type];
+        this._registerKeyValue(this.key, this.value);
+      },
+
+      /**
+       * Retrieves meta data value by key.
+       *
+       * @method byKey
+       * @param {string} key The key of the meta-data to be returned.
+       * @return {*}
+       */
+      byKey: function(key) {
+        return this._metaData && this._metaData[key];
+      },
+
+      _resetRegistration: function(oldKey) {
+        this._unregisterKey(oldKey);
+        this._registerKeyValue(this.key, this.value);
+      },
+
+      _unregisterKey: function(key) {
+        this._unregister(key, this._metaData, this.list);
+      },
+
+      _registerKeyValue: function(key, value) {
+        this._register(key, value, this._metaData, this.list);
+      },
+
+      _register: function(key, value, data, list) {
+        if (key && data && value !== undefined) {
+          data[key] = value;
+          list.push(value);
+        }
+      },
+
+      _unregister: function(key, data, list) {
+        if (key && data) {
+          if (key in data) {
+            var value = data[key];
+            delete data[key];
+            this.arrayDelete(list, value);
+          }
+        }
+      }
+
+    });
+
+    Polymer.IronMeta.getIronMeta = function getIronMeta() {
+       if (singleton === null) {
+         singleton = new Polymer.IronMeta();
+       }
+       return singleton;
+     };
+
+    /**
+    `iron-meta-query` can be used to access infomation stored in `iron-meta`.
+
+    Examples:
+
+    If I create an instance like this:
+
+        <iron-meta key="info" value="foo/bar"></iron-meta>
+
+    Note that value="foo/bar" is the metadata I've defined. I could define more
+    attributes or use child nodes to define additional metadata.
+
+    Now I can access that element (and it's metadata) from any `iron-meta-query` instance:
+
+         var value = new Polymer.IronMetaQuery({key: 'info'}).value;
+
+    @group Polymer Iron Elements
+    @element iron-meta-query
+    */
+    Polymer.IronMetaQuery = Polymer({
+
+      is: 'iron-meta-query',
+
+      properties: {
+
+        /**
+         * The type of meta-data.  All meta-data of the same type is stored
+         * together.
+         */
+        type: {
+          type: String,
+          value: 'default',
+          observer: '_typeChanged'
+        },
+
+        /**
+         * Specifies a key to use for retrieving `value` from the `type`
+         * namespace.
+         */
+        key: {
+          type: String,
+          observer: '_keyChanged'
+        },
+
+        /**
+         * The meta-data to store or retrieve.
+         */
+        value: {
+          type: Object,
+          notify: true,
+          readOnly: true
+        },
+
+        /**
+         * Array of all meta-data values for the given type.
+         */
+        list: {
+          type: Array,
+          notify: true
+        }
+
+      },
+
+      /**
+       * Actually a factory method, not a true constructor. Only runs if
+       * someone invokes it directly (via `new Polymer.IronMeta()`);
+       *
+       * @param {{type: (string|undefined), key: (string|undefined)}=} config
+       */
+      factoryImpl: function(config) {
+        if (config) {
+          for (var n in config) {
+            switch(n) {
+              case 'type':
+              case 'key':
+                this[n] = config[n];
+                break;
+            }
+          }
+        }
+      },
+
+      created: function() {
+        // TODO(sjmiles): good for debugging?
+        this._metaDatas = metaDatas;
+        this._metaArrays = metaArrays;
+      },
+
+      _keyChanged: function(key) {
+        this._setValue(this._metaData && this._metaData[key]);
+      },
+
+      _typeChanged: function(type) {
+        this._metaData = metaDatas[type];
+        this.list = metaArrays[type];
+        if (this.key) {
+          this._keyChanged(this.key);
+        }
+      },
+
+      /**
+       * Retrieves meta data value by key.
+       * @param {string} key The key of the meta-data to be returned.
+       * @return {*}
+       */
+      byKey: function(key) {
+        return this._metaData && this._metaData[key];
+      }
+
+    });
+
+  })();
+</script>
+
+
+<dom-module id="iron-icon" assetpath="../bower_components/iron-icon/">
+
+  <style>
+    :host {
+      @apply(--layout-inline);
+      @apply(--layout-center-center);
+      position: relative;
+
+      vertical-align: middle;
+
+      fill: var(--iron-icon-fill-color, currentcolor);
+      stroke: var(--iron-icon-stroke-color, none);
+
+      width: var(--iron-icon-width, 24px);
+      height: var(--iron-icon-height, 24px);
+    }
+  </style>
+
+  <template>
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'iron-icon',
+
+      properties: {
+
+        /**
+         * The name of the icon to use. The name should be of the form:
+         * `iconset_name:icon_name`.
+         */
+        icon: {
+          type: String,
+          observer: '_iconChanged'
+        },
+
+        /**
+         * The name of the theme to used, if one is specified by the
+         * iconset.
+         */
+        theme: {
+          type: String,
+          observer: '_updateIcon'
+        },
+
+        /**
+         * If using iron-icon without an iconset, you can set the src to be
+         * the URL of an individual icon image file. Note that this will take
+         * precedence over a given icon attribute.
+         */
+        src: {
+          type: String,
+          observer: '_srcChanged'
+        },
+
+        /**
+         * @type {!Polymer.IronMeta}
+         */
+        _meta: {
+          value: Polymer.Base.create('iron-meta', {type: 'iconset'})
+        }
+
+      },
+
+      _DEFAULT_ICONSET: 'icons',
+
+      _iconChanged: function(icon) {
+        var parts = (icon || '').split(':');
+        this._iconName = parts.pop();
+        this._iconsetName = parts.pop() || this._DEFAULT_ICONSET;
+        this._updateIcon();
+      },
+
+      _srcChanged: function(src) {
+        this._updateIcon();
+      },
+
+      _usesIconset: function() {
+        return this.icon || !this.src;
+      },
+
+      /** @suppress {visibility} */
+      _updateIcon: function() {
+        if (this._usesIconset()) {
+          if (this._iconsetName) {
+            this._iconset = /** @type {?Polymer.Iconset} */ (
+              this._meta.byKey(this._iconsetName));
+            if (this._iconset) {
+              this._iconset.applyIcon(this, this._iconName, this.theme);
+              this.unlisten(window, 'iron-iconset-added', '_updateIcon');
+            } else {
+              this.listen(window, 'iron-iconset-added', '_updateIcon');
+            }
+          }
+        } else {
+          if (!this._img) {
+            this._img = document.createElement('img');
+            this._img.style.width = '100%';
+            this._img.style.height = '100%';
+            this._img.draggable = false;
+          }
+          this._img.src = this.src;
+          Polymer.dom(this.root).appendChild(this._img);
+        }
+      }
+
+    });
+
+  </script>
+
+</dom-module>
+
+
+<style is="custom-style">
+
+  :root {
+    /*
+     * You can use these generic variables in your elements for easy theming.
+     * For example, if all your elements use `--primary-text-color` as its main
+     * color, then switching from a light to a dark theme is just a matter of
+     * changing the value of `--primary-text-color` in your application.
+     */
+    --primary-text-color: var(--light-theme-text-color);
+    --primary-background-color: var(--light-theme-background-color);
+    --secondary-text-color: var(--light-theme-secondary-color);
+    --disabled-text-color: var(--light-theme-disabled-color);
+    --divider-color: var(--light-theme-divider-color);
+
+    /*
+     * Primary and accent colors. Also see color.html for more colors.
+     */
+    --primary-color: #3f51b5;  /* --paper-indigo-500 */
+    --light-primary-color: #c5cae9;  /* --paper-indigo-100 */
+    --dark-primary-color: #303f9f;  /* --paper-indigo-700 */
+
+    --accent-color: #ff4081;  /* --paper-pink-a200 */
+    --light-accent-color: #ff80ab;  /* --paper-pink-a100 */
+    --dark-accent-color: #f50057;  /* --paper-pink-a400 */
+
+    /*
+     * Material Design Light background theme
+     */
+    --light-theme-background-color: #ffffff;
+    --light-theme-base-color: #000000;
+    --light-theme-text-color: #212121;
+    --light-theme-secondary-color: #737373;  /* for secondary text and icons */
+    --light-theme-disabled-color: #9b9b9b;  /* disabled/hint text */
+    --light-theme-divider-color: #dbdbdb;
+
+    /*
+     * Material Design Dark background theme
+     */
+    --dark-theme-background-color: #212121;
+    --dark-theme-base-color: #ffffff;
+    --dark-theme-text-color: #ffffff;
+    --dark-theme-secondary-color: #bcbcbc;  /* for secondary text and icons */
+    --dark-theme-disabled-color: #646464;  /* disabled/hint text */
+    --dark-theme-divider-color: #3c3c3c;
+
+    /*
+     * Deprecated values because of their confusing names.
+     */
+    --text-primary-color: var(--dark-theme-text-color);
+    --default-primary-color: var(--primary-color);
+
+  }
+
+</style>
 <script>
 
   /**
@@ -11712,139 +11943,6 @@ this.fire('dom-change');
     });
   </script>
 </dom-module>
-<style is="custom-style">
-
-  :root {
-
-    --shadow-transition: {
-      transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-    };
-
-    --shadow-none: {
-      box-shadow: none;
-    };
-
-    /* from http://codepen.io/shyndman/pen/c5394ddf2e8b2a5c9185904b57421cdb */
-
-    --shadow-elevation-2dp: {
-      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                  0 1px 5px 0 rgba(0, 0, 0, 0.12),
-                  0 3px 1px -2px rgba(0, 0, 0, 0.2);
-    };
-
-    --shadow-elevation-3dp: {
-      box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
-                  0 1px 8px 0 rgba(0, 0, 0, 0.12),
-                  0 3px 3px -2px rgba(0, 0, 0, 0.4);
-    };
-
-    --shadow-elevation-4dp: {
-      box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
-                  0 1px 10px 0 rgba(0, 0, 0, 0.12),
-                  0 2px 4px -1px rgba(0, 0, 0, 0.4);
-    };
-
-    --shadow-elevation-6dp: {
-      box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
-                  0 1px 18px 0 rgba(0, 0, 0, 0.12),
-                  0 3px 5px -1px rgba(0, 0, 0, 0.4);
-    };
-
-    --shadow-elevation-8dp: {
-      box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
-                  0 3px 14px 2px rgba(0, 0, 0, 0.12),
-                  0 5px 5px -3px rgba(0, 0, 0, 0.4);
-    };
-
-    --shadow-elevation-16dp: {
-      box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
-                  0  6px 30px 5px rgba(0, 0, 0, 0.12),
-                  0  8px 10px -5px rgba(0, 0, 0, 0.4);
-    };
-
-  }
-
-</style>
-<dom-module id="paper-material-shared-styles" assetpath="../bower_components/paper-material/">
-  <template>
-    <style>
-      :host {
-        display: block;
-        position: relative;
-      }
-
-      :host([elevation="1"]) {
-        @apply(--shadow-elevation-2dp);
-      }
-
-      :host([elevation="2"]) {
-        @apply(--shadow-elevation-4dp);
-      }
-
-      :host([elevation="3"]) {
-        @apply(--shadow-elevation-6dp);
-      }
-
-      :host([elevation="4"]) {
-        @apply(--shadow-elevation-8dp);
-      }
-
-      :host([elevation="5"]) {
-        @apply(--shadow-elevation-16dp);
-      }
-    </style>
-  </template>
-</dom-module>
-
-
-<dom-module id="paper-material" assetpath="../bower_components/paper-material/">
-  <template>
-    <style include="paper-material-shared-styles"></style>
-    <style>
-      :host([animated]) {
-        @apply(--shadow-transition);
-      }
-    </style>
-
-    <content></content>
-  </template>
-</dom-module>
-<script>
-  Polymer({
-    is: 'paper-material',
-
-    properties: {
-      /**
-       * The z-depth of this element, from 0-5. Setting to 0 will remove the
-       * shadow, and each increasing number greater than 0 will be "deeper"
-       * than the last.
-       *
-       * @attribute elevation
-       * @type number
-       * @default 1
-       */
-      elevation: {
-        type: Number,
-        reflectToAttribute: true,
-        value: 1
-      },
-
-      /**
-       * Set this to true to animate the shadow when setting a new
-       * `elevation` value.
-       *
-       * @attribute animated
-       * @type boolean
-       * @default false
-       */
-      animated: {
-        type: Boolean,
-        reflectToAttribute: true,
-        value: false
-      }
-    }
-  });
-</script>
 <script>
 
   /**
@@ -16893,6 +16991,13 @@ module.exports = Array.isArray || function (arr) {
     color: var(--link-hover-color);
   }
 
+  hr {
+    margin: 0;
+    border-width: 2px 0 0 0;
+    border-style: solid;
+    color: #ddd;
+  }
+
   /* Drawer panel + main panel */
   paper-drawer-panel {
     max-width: 960px;
@@ -16978,12 +17083,12 @@ module.exports = Array.isArray || function (arr) {
     margin: 0;
   }
 
-  .titles {
+  paper-toolbar .titles {
     text-align: center;
     margin: 0 5px;
   }
 
-  .greeting {
+  paper-toolbar .greeting {
     @apply(--paper-font-headline);
     font-size: 22px;
     font-weight: 500;
@@ -16991,7 +17096,7 @@ module.exports = Array.isArray || function (arr) {
     padding: 0 0 10px 0;
   }
 
-  .subtitle {
+  paper-toolbar .subtitle {
     @apply(--paper-font-subhead);
     color: var(--secondary-text-color);
   }
@@ -17008,8 +17113,47 @@ module.exports = Array.isArray || function (arr) {
   }
 
   .imageFlipCard front iron-image {
-    --iron-image-width: 100%;
+    display: block;
+    max-width: 500px;
+    margin: 0 auto;
     border-radius: 10px;
+
+    --iron-image-width: 100%;
+  }
+
+  .back-content {
+    max-width: 550px;
+    margin: 0 auto;
+  }
+
+  .back-content hr {
+    border-style: dotted;
+    margin: 0 0 2px 0;
+  }
+
+  .imageFlipCard .goals-list {
+    padding-left: 10px;
+    margin-top: 5px;
+  }
+
+  .back-content .buttons-container {
+    @apply(--layout-horizontal);
+    @apply(--layout-around-justified);
+    margin: 0 0 10px 0;
+  }
+
+  .back-content .buttons-container a {
+    display: block;
+  }
+
+  .back-content paper-button {
+    color: white;
+    font-weight: 700;
+    text-transform: none;
+  }
+
+  .back-content .title {
+    font-weight: 500;
   }
 
   /* Warning dialog */
@@ -17022,18 +17166,18 @@ module.exports = Array.isArray || function (arr) {
 
   /* Small mobile */
   @media (max-width: 360px) {
-    .greeting {
+    paper-toolbar .greeting {
       @apply(--paper-font-sm-title);
     }
 
-    .subtitle {
+    paper-toolbar .subtitle {
       @apply(--paper-font-sm-subhead);
     }
   }
 
   /* Tablet+ */
   @media (min-width: 601px) {
-    .greeting {
+    paper-toolbar .greeting {
       font-size: 26px;
     }
 
@@ -17074,21 +17218,21 @@ module.exports = Array.isArray || function (arr) {
     @apply(--layout-wrap);
   }
 
-  .centeringContainer {
+  .centering-container {
     position: absolute;
     @apply(--layout-fit);
     @apply(--layout-horizontal);
     @apply(--layout-center-center);
   }
 
-  .centeringContainer iron-icon {
+  .centering-container iron-icon {
     color: var(--image-icon-color);
     --iron-icon-width: 30px;
     --iron-icon-height: 30px;
     opacity: 0.8;
   }
 
-  .centeringContainer iron-icon:hover {
+  .centering-container iron-icon:hover {
     color: var(--link-hover-color);
     opacity: 1;
   }
@@ -17103,6 +17247,19 @@ module.exports = Array.isArray || function (arr) {
 
   .primary {
     color: var(--primary-color);
+  }
+
+  .primary-b {
+    background-color: var(--primary-color);
+  }
+
+  .accent-b {
+    background-color: var(--accent-color);
+  }
+
+  .text-center {
+    width: 100%;
+    text-align: center;
   }
 
   /* Material Design Adaptive Breakpoints */
@@ -17706,6 +17863,9 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
 
       paper-button {
         opacity: var(--audio-images-button-opacity, 1);
+        margin: 0;
+        padding: 0;
+        min-width: 0;
       }
 
       paper-button:hover {
@@ -17853,7 +18013,7 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
         {&quot;imageSrc&quot;: &quot;home-icon.png&quot;, &quot;soundId&quot;: &quot;next&quot;},
         {&quot;imageSrc&quot;: &quot;webdev-icon.jpg&quot;, &quot;soundId&quot;: &quot;webdev&quot;},
         {&quot;imageSrc&quot;: &quot;transport-icon.png&quot;, &quot;soundId&quot;: &quot;transport&quot;}
-      ]" ,="" path="audio-images/home/">
+      ]" ,="" path="audio_images/home/">
     </audio-images>
 
   </template>
@@ -18124,6 +18284,7 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
   <g id="chevron-left"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></g>
   <g id="chevron-right"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></g>
   <g id="turning"><path d="M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z"></path></g>
+  <g id="open-in-new"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></g>
 </defs></svg>
 </iron-iconset-svg>
 <dom-module id="flip-card" assetpath="flip-card/">
@@ -18131,6 +18292,7 @@ return null!=g&&null!=g.src?(a.create(g.src),null==d&&(d=c.startTime),h=b.active
     <style>
       :host {
         display: block;
+        -webkit-perspective: 1000px;
         perspective: 1000px; 
       }
 
