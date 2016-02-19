@@ -117,9 +117,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   /* Drawer panel + main panel */
   paper-drawer-panel {
-    max-width: 960px;
-    position: relative;
-    margin: 0 auto;
+    margin-bottom: 30px;
     --paper-drawer-panel-scrim-opacity: 0.6;
     --paper-drawer-panel-scrim: {
       background-color: var(--primary-background-color);
@@ -294,6 +292,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   /* Tablet+ */
   @media (min-width: 601px) {
+    paper-drawer-panel {
+      max-width: 960px;
+      position: relative;
+      margin: 0 auto;
+    }
+
     paper-toolbar .greeting {
       font-size: 26px;
     }
