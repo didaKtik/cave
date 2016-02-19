@@ -67,7 +67,7 @@ gulp.task('elements', function() {
 });
 
 gulp.task('projects', function() {
-  return styleTask('projects', ['**/*.css']);
+  return styleTask('projects', ['**/*min.css']);
 });
 
 var optimizeHtmlTask = function(src, dest) {
@@ -319,7 +319,8 @@ gulp.task('serve:dist', ['default'], function() {
 gulp.task('default', ['clean'], function(cb) {
   // Uncomment 'cache-config' if you are going to use service workers.
   runSequence(
-    ['copy', 'styles', 'projects'],
+    ['copy', 'styles'],
+    'projects',
     'elements',
     ['lint', 'images', 'fonts', 'html'],
     'vulcanize', // 'cache-config',
