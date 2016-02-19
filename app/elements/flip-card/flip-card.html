@@ -82,13 +82,13 @@ time there are only two options:
       }
 
       :host([axis="x"].flip) .wrapper > ::content front {
-        transform: rotateX(-180deg);
-        -webkit-transform: rotateX(-180deg); 
+        transform: rotateX(180deg);
+        -webkit-transform: rotateX(180deg); 
       }
 
       :host([axis="x"].flip) .wrapper > ::content back {
-        transform: rotateX(360deg);
-        -webkit-transform: rotateX(360deg);
+        transform: rotateX(0deg);
+        -webkit-transform: rotateX(0deg);
       }
     </style>
 
@@ -105,7 +105,6 @@ time there are only two options:
       is: 'flip-card',
 
       flip: function(e) {
-        debugger;
         if (e.target.tagName !== 'A' && e.target.tagName !== 'PAPER-BUTTON') {
           this.flipped = this.flipped ? false : true;
 

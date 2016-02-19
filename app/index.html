@@ -12,14 +12,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <html lang="en">
 
 <head>
-  <!-- <script>'https:'!==window.location.protocol&&(window.location.protocol='https')</script> -->
   <meta charset="utf-8">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="Polymer Starter Kit">
   <title>Pierre Mohr Durdez's cave</title>
-
-  <!-- Place favicon.ico in the `app/` directory -->
 
   <!-- Chrome for Android theme color -->
   <meta name="theme-color" content="#2E3AA1">
@@ -37,7 +34,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <!-- Add to homescreen for Safari on iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <!-- <meta name=”viewport” content=”width=device-width, user-scalable=0, minimal-ui”> -->
+  <meta name=”viewport” content=”width=device-width, user-scalable=0”>
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="PSK">
   <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">
@@ -45,9 +42,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- Tile icon for Win8 (144x144) -->
   <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
 
-  <!-- so why to have this style sheet ? You can style usual nodes, host nodes can you ? Does it recognize the css variables syntax? No because it is before the 
-    import of the web components. So basically the things that should apply document wide (i.e. to all elements, custom or not), just put it in app-theme.html and
-    import it in elements.html  -->
+  <!-- This is for styles that you need before elements are loaded -->
   <!-- build:css styles/main.css -->
   <!-- <link rel="stylesheet" href="styles/main.css"> -->
   <!-- endbuild-->
@@ -67,7 +62,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       left: 0;
       right: 0;
       bottom: 0;
-      transition: opacity 300ms cubic-bezier(0,0,0.2,1);
+      transition: opacity 400ms cubic-bezier(0,0,0.2,1);
       opacity: 0;
       will-change: opacity;
       z-index: 1;
@@ -83,9 +78,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        in this file. All other imports should go in elements.html -->
   <link rel="import" href="elements/elements.html">
 
-  <!-- For shared styles, shared-styles.html import in elements.html -->
-  <!-- shared-styles is the name of the module, i.e. the id of the <dom-module> element -->
-  <!-- Not an import, just say that the shared styles should be used at this level -->
+  <!-- Not an import (done in elements.html), just say that the shared styles should be used at this level -->
   <style is="custom-style" include="shared-styles"></style>
 </head>
 
@@ -127,7 +120,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <section data-route="home">
             <paper-toolbar class="mainToolBar" data-route="home">
-              <home-toolbar-audio-image></home-toolbar-audio-image>
+            <iron-image src="audio_images/home/home-icon.png" preload fade></iron-image>
+              <!-- <home-toolbar-audio-image></home-toolbar-audio-image> -->
               <span class="flexchild"></span>
               <div class='titles'>
                 <div class="greeting">Welcome !</div>
@@ -424,7 +418,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <my-card image="images/transport/thesis.png" link="http://www.slideshare.net/PierreMohrDurdez/could-the-sufficiency-of-vehicles-be-used-to-apply-a-progressive-and-largescale-car-fee-at-the-city-level?related=1">
                   <div class="title">Policies for lighter vehicles in the cities</div>
                   <div> What if you were the mayor of a dense and congested city and you wanted to spur the use of lighter vehicles in your city? You may search for an example of such a policy implemented in another city and find... nothing!</div>
-                  <div>In this master's thesis I investigate a family of policies that could be used by transport planners to improve the <span class="primary">livability</span> of their city while still allowing the use of <span class="primary">personal</span> cars. Click on the image to access the presentation I made out of it. The complete work is available for <a class="primary" href="downloadables/float-in-competition.pdf"> download here</a>. 
+                  <div>In this master's thesis I investigate a family of policies that could be used by transport planners to improve the <span class="primary">livability</span> of their city while still allowing the use of <span class="primary">personal</span> cars. Click on the image to access the presentation I made out of it. 
                 </my-card>
               </paper-material>
             </div>
@@ -438,137 +432,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </paper-toast>
 
     <iron-media-query id="mquery" query="min-width: 600px"></iron-media-query>
-
-  </template>
-
-    <!-- <paper-fab icon="favorite" title="heart"></paper-fab> -->
-
-    <!-- <paper-drawer-panel id="paperDrawerPanel">
-
-      <paper-scroll-header-panel drawer fixed>
-
-        <paper-toolbar id="drawerToolbar">
-          <span class="menu-name">Menu</span>
-        </paper-toolbar>
-
-        <paper-menu attr-for-selected="data-route" selected="[[route]]">
-          <a data-route="home" href="{{baseUrl}}">
-            <iron-icon icon="home"></iron-icon>
-            <span>Home</span>
-          </a>
-
-          <a data-route="users" href="{{baseUrl}}users">
-            <iron-icon icon="info"></iron-icon>
-            <span>Users</span>
-          </a>
-
-          <a data-route="contact" href="{{baseUrl}}contact">
-            <iron-icon icon="mail"></iron-icon>
-            <span>Contact</span>
-          </a>
-
-          <a data-route="books" href="{{baseUrl}}books">
-            <iron-icon icon="book"></iron-icon>
-            <span>Books</span>
-          </a>
-        </paper-menu>
-      </paper-scroll-header-panel>
-
-      <paper-scroll-header-panel main id="headerPanelMain" condenses keep-condensed-header>
-
-        <paper-toolbar id="mainToolbar" class="tall">
-          <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
-
-          <span class="flexchild"></span>
-
-          <paper-icon-button icon="refresh"></paper-icon-button>
-          <paper-icon-button icon="search"></paper-icon-button>
-
-          <div class="middle middle-container">
-            <div class="app-name">Polymer Starter Kit</div>
-          </div>
-
-          <div class="bottom bottom-container">
-            <div class="bottom-title">The future of the web today</div>
-          </div>
-        </paper-toolbar>
-
-        <div class="content">
-          <iron-pages attr-for-selected="data-route" selected="{{route}}">
-            <section data-route="home">
-              <paper-material elevation="0">
-                <my-greeting></my-greeting>
-
-                <p class="subhead">You now have:</p>
-                <my-list></my-list>
-
-                <p>Looking for more Web App layouts? Check out our <a href="https://github.com/PolymerElements/app-layout-templates">layouts</a> collection. You can also <a href="http://polymerelements.github.io/app-layout-templates/">preview</a> them live.</p>
-              </paper-material>
-
-              <paper-material elevation="0" class="container">
-                <iron-image style="background-color: lightgray; --iron-image-width: 50%;"
-                  preload fade src="http://lorempixel.com/600/400"></iron-image>
-                <p style="width:50%;">This is another card.</p>
-              </paper-material>
-
-              <paper-material elevation="0">
-                <h1 id="license">License</h1>
-                <p>Everything in this repo is BSD style license unless otherwise specified.</p>
-                <p>Copyright (c) 2015 The Polymer Authors. All rights reserved.</p>
-                <p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
-                <ul>
-                <li>Redistributions of source code must retain the above copyright
-                notice, this list of conditions and the following disclaimer.</li>
-                <li>Redistributions in binary form must reproduce the above
-                copyright notice, this list of conditions and the following disclaimer
-                in the documentation and/or other materials provided with the
-                distribution.</li>
-                <li>Neither the name of Google Inc. nor the names of its
-                contributors may be used to endorse or promote products derived from
-                this software without specific prior written permission.</li>
-                </ul>
-                <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
-              </paper-material>
-            </section>
-
-            <section data-route="users">
-              <paper-material elevation="0">
-                <h2 class="page-title">Users</h2>
-                <p>This is the users section</p>
-                <a href$="{{baseUrl}}users/Addy">Addy</a><br>
-                <a href$="{{baseUrl}}users/Rob">Rob</a><br>
-                <a href$="{{baseUrl}}users/Chuck">Chuck</a><br>
-                <a href$="{{baseUrl}}users/Sam">Sam</a>
-              </paper-material>
-            </section>
-
-            <section data-route="user-info">
-              <paper-material elevation="0">
-                <h2 class="page-title">User: {{params.name}}</h2>
-                <div>This is {{params.name}}'s section</div>
-              </paper-material>
-            </section>
-
-            <section data-route="contact">
-              <paper-material elevation="0">
-                <h2 class="page-title">Contact</h2>
-                <p>This is the contact section</p>
-              </paper-material>
-            </section>
-
-            <section data-route="books">
-              <paper-material elevation="0">
-                <p>Hello, World!</p>
-              </paper-material>
-            </section>
-          </iron-pages>
-        </div>
-      </paper-scroll-header-panel>
-    </paper-drawer-panel>
-
-    <paper-toast id="toast">
-      <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
-    </paper-toast> -->
 
     <!-- Uncomment next block to enable Service Worker support (1/2) -->
     <!--
@@ -587,6 +450,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </platinum-sw-cache>
     </platinum-sw-register>
     -->
+
+  </template>
 
   <!-- build:js scripts/app.js -->
   <script src="scripts/app.js"></script>

@@ -47,17 +47,6 @@
         @apply(--layout-around-justified);
       }
 
-      paper-button {
-        opacity: var(--audio-images-button-opacity, 1);
-        margin: 0;
-        padding: 0;
-        min-width: 0;
-      }
-
-      paper-button:hover {
-        opacity: 1;
-      }
-
       iron-icon {
         --iron-icon-width: var(--audio-images-icons-width, 24px);
         --iron-icon-height: var(--audio-images-icons-height, 24px);
@@ -90,9 +79,9 @@
     </iron-selector>
 
     <div id="endedButtons" hidden>
-      <paper-button on-tap="previous"><iron-icon icon="my:chevron-left"></iron-icon></paper-button>
-      <paper-button on-tap="play"><iron-icon icon="my:play-arrow"></iron-icon></paper-button>
-      <paper-button on-tap="next"><iron-icon icon="my:chevron-right"></iron-icon></paper-button>
+      <iron-icon icon="my:chevron-left" on-tap="previous"></iron-icon>
+      <iron-icon icon="my:play-arrow" on-tap="play"></iron-icon>
+      <iron-icon icon="my:chevron-right" on-tap="next"></iron-icon>
     </div>
     <div id="playingButtons">
       <paper-button on-tap="stop"><iron-icon icon="my:stop"></iron-icon></paper-button>
