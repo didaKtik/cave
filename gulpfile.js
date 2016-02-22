@@ -190,11 +190,15 @@ gulp.task('copy', function() {
     'app/projects/**/*'
   ]).pipe(gulp.dest(dist('projects')));
 
+  var data = gulp.src([
+    'app/data/**/*'
+  ]).pipe(gulp.dest(dist('data')));
+
   var audios = gulp.src([
     'app/audio_images/**/*.{ogg,mp3}'
   ]).pipe(gulp.dest(dist('audio_images')));
 
-  return merge(app, bower, audios, projects)
+  return merge(app, bower, audios, projects, data)
     .pipe($.size({
       title: 'copy'
     }));
