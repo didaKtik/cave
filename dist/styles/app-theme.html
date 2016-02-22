@@ -221,6 +221,22 @@
     --iron-image-width: 100%;
   }
 
+  .imageFlipCard .centering-container paper-material {
+    border-radius: 5px;
+  }
+
+  .centering-container iron-icon {
+    color: var(--image-icon-color);
+    --iron-icon-width: 30px;
+    --iron-icon-height: 30px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 5px;
+  }
+
+  .centering-container iron-icon:hover {
+    color: var(--link-hover-color);
+  }
+
   .back-content {
     max-width: 550px;
     margin: 0 auto;
@@ -329,18 +345,6 @@
     @apply(--layout-fit);
     @apply(--layout-horizontal);
     @apply(--layout-center-center);
-  }
-
-  .centering-container iron-icon {
-    color: var(--image-icon-color);
-    --iron-icon-width: 30px;
-    --iron-icon-height: 30px;
-    opacity: 0.8;
-  }
-
-  .centering-container iron-icon:hover {
-    color: var(--link-hover-color);
-    opacity: 1;
   }
 
   .flexchild {

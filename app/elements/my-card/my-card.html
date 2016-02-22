@@ -53,20 +53,22 @@
         @apply(--layout-center-center);
       }
 
+      .image-container paper-material {
+        border-radius: 5px;
+      }
+      
       .image-container iron-icon {
         color: var(--image-icon-color);
         --iron-icon-width: 30px;
         --iron-icon-height: 30px;
-        opacity: 0.8;
+        background: rgba(0,0,0,0.3);
+        border-radius: 5px;
 
         @apply(--my-card-icon);
       }
 
       .image-container iron-icon:hover {
         color: var(--link-hover-color);
-        opacity: 1;
-
-        @apply(--my-card-icon);
       }
 
       #title {
