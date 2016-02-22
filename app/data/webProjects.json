@@ -1,0 +1,135 @@
+[
+	{
+		"name": "Responsive Portofolio",
+		"src": "images/webdev/portofolio-large.png",
+		"goals": [
+			"Practicing **HTML** and **CSS** and using the Bootstrap framework to obtain a grid layout.",
+			"Making the portofolio **responsive**.",
+			"Getting acquainted with **build tools** to automatically process the images."
+		],
+		"gitHubUrl": "https://github.com/didaKtik/P1-Responsive-Portofolio",
+		"projectUrl": "projects/portofolio/index.html",
+		"courses": [
+			{
+				"title": "Intro to HTML and CSS",
+				"url": "https://www.udacity.com/course/intro-to-html-and-css--ud304"
+			},
+			{
+				"title": "Responsive Web Design Fundamentals",
+				"url": "https://www.udacity.com/course/responsive-web-design-fundamentals--ud893"
+			},
+			{
+				"title": "Responsive Images",
+				"url": "https://www.udacity.com/course/responsive-images--ud882"
+			}
+		]
+	},
+
+	{
+		"name": "Interactive Resume",
+		"src": "images/webdev/interactive-resume-large.png",
+		"goals": [
+			"Practicing **dom manipulations** in javascript and jQuery to make the resume interactive.",
+			"Using the **Google Maps API** to display a map dynamically updated by the users actions.",
+			"Using **d3.js** and the **canvas API** to draw a data-driven graph."
+		],
+		"gitHubUrl": "https://github.com/didaKtik/P2-Interactive-Resume",
+		"projectUrl": "projects/resume/index.html",
+		"courses": [
+			{
+				"title": "JavaScript Basics",
+				"url": "https://www.udacity.com/course/javascript-basics--ud804"
+			},
+			{
+				"title": "Intro to jQuery",
+				"url": "https://www.udacity.com/course/intro-to-jquery--ud245"
+			},
+			{
+				"title": "How to Use Git and GitHub",
+				"url": "https://www.udacity.com/course/how-to-use-git-and-github--ud775"
+			}
+		]
+	},
+
+	{
+		"name": "Arcade Game",
+		"src": "images/webdev/arcade-game-large.png",
+		"goals": [
+			"Understanding the logic and architecture of a **game engine** in Javascript.",
+			"Coding the player and enemy classes in JavaScript's **object-oriented** pseudo-classical style."
+		],
+		"gitHubUrl": "https://github.com/didaKtik/P3-Arcade-Game",
+		"projectUrl": "projects/game/index.html",
+		"courses": [
+			{
+				"title": "Object-Oriented JavaScript",
+				"url": "https://www.udacity.com/course/object-oriented-javascript--ud015"
+			},
+			{
+				"title": "HTML5 Canvas",
+				"url": "https://www.udacity.com/course/html5-canvas--ud292"
+			}
+		]
+	},
+
+	{
+		"name": "Website Optimisation",
+		"src": "images/webdev/rendering-optimisation-large.png",
+		"goals": [
+			"Lightening the **critical rendering path** of index.html to achieve a PageSpeed score of 94/100 on mobile.",
+			"Obtaining consistent **60 fps** when scrolling by avoiding layout trashing and unnecessary elements in javascript, and using 3D transforms in css."
+		],
+		"gitHubUrl": "https://github.com/didaKtik/P4-Brower-Rendering-Optimization",
+		"courses": [
+			{
+				"title": "Website Performance Optimization",
+				"url": "https://www.udacity.com/course/website-performance-optimization--ud884"
+			},
+			{
+				"title": "Browser Rendering Optimization",
+				"url": "https://www.udacity.com/course/browser-rendering-optimization--ud860"
+			}
+		]
+	},
+
+	{
+		"name": "Rwanda Map",
+		"src": "images/webdev/rwanda-map-large.png",
+		"goals": [
+			"Creating a **single-page** map displaying a set of locations and making it possible to filter or add locations.",
+			"Making **asynchronous queries** to Wikipedia to get additional informations about each location.",
+			"Structure the application using **Knockout**'s implementation of the **MVC pattern**."
+		],
+		"gitHubUrl": "https://github.com/didaKtik/P5-Neighbourhood-Map",
+		"projectUrl": "projects/map/index.html",
+		"courses": [
+			{
+				"title": "Intro to AJAX",
+				"url": "https://www.udacity.com/course/intro-to-ajax--ud110"
+			},
+			{
+				"title": "JavaScript Design Patterns",
+				"url": "https://www.udacity.com/course/javascript-design-patterns--ud989"
+			},
+			{
+				"title": "Learn Backbone.js",
+				"url": "https://www.udacity.com/course/learn-backbonejs--ud990"
+			}
+		]
+	},
+
+	{
+		"name": "Feed Reader Testing",
+		"src": "images/webdev/testing-large.png",
+		"goals": [
+			"Writing test suites with Jasmine.js to learn the basics of **testing**."
+		],
+		"gitHubUrl": "https://github.com/didaKtik/P6-Feed-Reader-Testing",
+		"courses": [
+			{
+				"title": "JavaScript Testing",
+				"url": "https://www.udacity.com/course/javascript-testing--ud549"
+			}
+		]
+	}
+]

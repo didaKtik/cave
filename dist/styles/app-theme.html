@@ -85,21 +85,6 @@
     user-select: none;
   }
 
-  a {
-    color: inherit;
-  }
-
-  a:hover {
-    color: var(--link-hover-color);
-  }
-
-  hr {
-    margin: 0;
-    border-width: 2px 0 0 0;
-    border-style: solid;
-    color: #ddd;
-  }
-
   /* Drawer panel + main panel */
   paper-drawer-panel {
     margin-bottom: 30px;
@@ -212,66 +197,6 @@
     background: var(--primary-background-color);
   }
 
-  .imageFlipCard front iron-image {
-    display: block;
-    max-width: 500px;
-    margin: 0 auto;
-    border-radius: 10px;
-
-    --iron-image-width: 100%;
-  }
-
-  .imageFlipCard .centering-container paper-material {
-    border-radius: 5px;
-  }
-
-  .centering-container iron-icon {
-    color: var(--image-icon-color);
-    --iron-icon-width: 30px;
-    --iron-icon-height: 30px;
-    background: rgba(0,0,0,0.3);
-    border-radius: 5px;
-  }
-
-  .centering-container iron-icon:hover {
-    color: var(--link-hover-color);
-  }
-
-  .back-content {
-    max-width: 550px;
-    margin: 0 auto;
-  }
-
-  .back-content hr {
-    border-style: dotted;
-    margin: 0 0 2px 0;
-  }
-
-  .imageFlipCard .goals-list {
-    padding-left: 10px;
-    margin-top: 5px;
-  }
-
-  .back-content .buttons-container {
-    @apply(--layout-horizontal);
-    @apply(--layout-around-justified);
-    margin: 0 0 10px 0;
-  }
-
-  .back-content .buttons-container a {
-    display: block;
-  }
-
-  .back-content paper-button {
-    color: white;
-    font-weight: 700;
-    text-transform: none;
-  }
-
-  .back-content .title {
-    font-weight: 500;
-  }
-
   /* Warning dialog */
   #toast .toast-hide-button {
     color: var(--accent-color);
@@ -332,43 +257,5 @@
       border-left-style: solid;
       border-radius: 15px 0 0 0;
     }
-  }
-
-  /* Utility classes */
-  .container {
-    @apply(--layout-horizontal);
-    @apply(--layout-wrap);
-  }
-
-  .centering-container {
-    position: absolute;
-    @apply(--layout-fit);
-    @apply(--layout-horizontal);
-    @apply(--layout-center-center);
-  }
-
-  .flexchild {
-    @apply(--layout-flex);
-  }
-
-  .accent {
-    color: var(--accent-color);
-  }
-
-  .primary {
-    color: var(--primary-color);
-  }
-
-  .primary-b {
-    background-color: var(--primary-color);
-  }
-
-  .accent-b {
-    background-color: var(--accent-color);
-  }
-
-  .text-center {
-    width: 100%;
-    text-align: center;
   }
 </style>

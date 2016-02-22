@@ -1,0 +1,161 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../styles/shared-styles.html">
+
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+
+<link rel="import" href="../my-card/my-card.html">
+<link rel="import" href="../flip-card/flip-card.html">
+<link rel="import" href="../html-echo/html-echo.html">
+
+<dom-module id="my-web-projects">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+      :host {
+        display: block;
+      }
+
+      front iron-image {
+        display: block;
+        max-width: 500px;
+        margin: 0 auto;
+        border-radius: 10px;
+
+        --iron-image-width: 100%;
+      }
+
+      .fit-center-center paper-material {
+        border-radius: 5px;
+      }
+
+      .fit-center-center iron-icon {
+        color: var(--image-icon-color);
+        --iron-icon-width: 30px;
+        --iron-icon-height: 30px;
+        background: rgba(0,0,0,0.3);
+        border-radius: 5px;
+      }
+
+      .fit-center-center iron-icon:hover {
+        color: var(--link-hover-color);
+      }
+
+      .back-content {
+        max-width: 550px;
+        margin: 0 auto;
+      }
+
+      ul {
+        padding-left: 10px;
+        margin-top: 5px;
+      }
+
+      .back-content hr {
+        border-style: dotted;
+        margin: 0 0 2px 0;
+      }
+
+      .back-content .buttons-container {
+        @apply(--layout-horizontal);
+        @apply(--layout-around-justified);
+        margin: 0 0 10px 0;
+      }
+
+      .back-content .buttons-container a {
+        display: block;
+      }
+
+      .back-content paper-button {
+        color: white;
+        font-weight: 700;
+        text-transform: none;
+      }
+
+      .back-content .title {
+        font-weight: 500;
+        font-size: 15px;
+      }
+    </style>
+
+    <iron-ajax auto id="GetData" url="../../data/webProjects.json" handle-as="json" last-response="{{projects}}" on-response="onResponse"></iron-ajax>
+
+    <template is="dom-repeat" items="{{projects}}">
+      <paper-material elevation="0">
+        <my-card>
+          <div class="title">[[item.name]]</div>
+          <flip-card class="imageFlipCard" axis="x">
+            <front>
+              <iron-image src="[[item.src]]"></iron-image>
+              <div class="fit-center-center">
+                <paper-material elevation="1">
+                  <iron-icon icon="my:turning"></iron-icon>
+                </paper-material>
+              </div>
+            </front>
+            <back>
+              <div class="back-content">
+                This project mainly consisted in:
+                <ul class="goals-list">
+                  <template id="goals" is="dom-repeat" items="[[item.goals]]">
+                    <li><html-echo html="[[item]]"></html-echo></li>
+                  </template>
+                </ul>
+                <div class="buttons-container">
+                  <a target="_blank" href="[[item.gitHubUrl]]">
+                    <paper-button raised class="primary-b">GitHub <iron-icon src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" alt="octocat" title="octocat"></iron-icon></paper-button>
+                  </a>
+                  <a target="_blank" href="[[item.projectUrl]]" hidden="[[!item.projectUrl]]">
+                    <paper-button raised class="accent-b">Project <iron-icon icon="my:open-in-new"></iron-icon></paper-button>
+                  </a>
+                </div>
+                <hr>
+                <div class="center-justified">
+                  <span class="title">Udacity courses</span>
+                </div>
+                <ul class="courses-list">
+                  <template is="dom-repeat" items="[[item.courses]]">
+                    <li><a target="_blank" href="[[item.url]]">[[item.title]]</a></li>
+                  </template>
+                </ul>
+              </div>
+            </back>
+          </flip-card>
+        </my-card>
+      </paper-material>
+    </template>
+  </template>
+
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'my-web-projects',
+
+      onResponse: function() {
+        this.projects.forEach(function(project) {
+          project.goals = project.goals.map(function(goal) {
+            return goal.replace(/\*\*(.*?)\*\*/g, function(match, token) {
+                return ('<span class="primary">' + token + '</span>');
+            });
+          });
+        });
+      }
+    });
+  })();
+  </script>
+</dom-module>

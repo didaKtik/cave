@@ -105,7 +105,7 @@ time there are only two options:
       is: 'flip-card',
 
       flip: function(e) {
-        if (e.target.tagName !== 'A' && e.target.tagName !== 'PAPER-BUTTON') {
+        if (e.target.tagName !== 'A' && e.target.tagName !== 'PAPER-BUTTON' && e.target.tagName !== 'IMG') {
           this.flipped = this.flipped ? false : true;
 
           var front = Polymer.dom(this.$.front).getDistributedNodes()[0],

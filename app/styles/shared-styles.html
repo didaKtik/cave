@@ -9,6 +9,72 @@
       paper-menu a > *, paper-menu paper-item > *, paper-menu paper-icon-item > * {
         pointer-events: none;
       }
+
+      a {
+        color: inherit;
+      }
+
+      a:hover {
+        color: var(--link-hover-color);
+      }
+
+      hr {
+        margin: 0;
+        border-width: 2px 0 0 0;
+        border-style: solid;
+        color: #ddd;
+      }
+
+      /* Utility attributes */
+
+      /* IE 10 support for HTML5 hidden attr */
+      [hidden] {
+        display: none !important;
+      }
+
+      /* Utility classes */
+      .horizontal {
+        @apply(--layout-horizontal);
+        @apply(--layout-wrap);
+      }
+
+      .center-justified {
+        @apply(--layout-horizontal);
+        @apply(--layout-wrap);
+        @apply(--layout-center-justified);
+      }
+
+      .fit-center-center {
+        position: absolute;
+        @apply(--layout-fit);
+        @apply(--layout-horizontal);
+        @apply(--layout-center-center);
+      }
+
+      .flexchild {
+        @apply(--layout-flex);
+      }
+
+      .accent {
+        color: var(--accent-color);
+      }
+
+      .primary {
+        color: var(--primary-color);
+      }
+
+      .primary-b {
+        background-color: var(--primary-color);
+      }
+
+      .accent-b {
+        background-color: var(--accent-color);
+      }
+
+      .text-center {
+        width: 100%;
+        text-align: center;
+      }
     </style>
   </template>
 </dom-module>
