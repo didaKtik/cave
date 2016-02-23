@@ -9,6 +9,7 @@
 		],
 		"gitHubUrl": "https://github.com/didaKtik/P1-Responsive-Portofolio",
 		"projectUrl": "projects/portofolio/index.html",
+		"responsive": true,
 		"courses": [
 			{
 				"title": "Intro to HTML and CSS",
@@ -35,6 +36,7 @@
 		],
 		"gitHubUrl": "https://github.com/didaKtik/P2-Interactive-Resume",
 		"projectUrl": "projects/resume/index.html",
+		"responsive": false,
 		"courses": [
 			{
 				"title": "JavaScript Basics",
@@ -60,6 +62,7 @@
 		],
 		"gitHubUrl": "https://github.com/didaKtik/P3-Arcade-Game",
 		"projectUrl": "projects/game/index.html",
+		"responsive": false,
 		"courses": [
 			{
 				"title": "Object-Oriented JavaScript",
@@ -102,6 +105,7 @@
 		],
 		"gitHubUrl": "https://github.com/didaKtik/P5-Neighbourhood-Map",
 		"projectUrl": "projects/map/index.html",
+		"responsive": true,
 		"courses": [
 			{
 				"title": "Intro to AJAX",

@@ -19186,6 +19186,10 @@ module.exports = Array.isArray || function (arr) {
                 return ('<span class="primary">' + token + '</span>');
             });
           });
+
+          if (project.projectUrl && !project.responsive && app.isMobile) {
+            project.projectUrl = null;
+          }
         });
       }
     });
