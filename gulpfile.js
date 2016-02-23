@@ -190,6 +190,10 @@ gulp.task('copy', function() {
     'app/projects/**/*'
   ]).pipe(gulp.dest(dist('projects')));
 
+  var pdf = gulp.src([
+    'app/pdf/**/*'
+  ]).pipe(gulp.dest(dist('pdf')));
+
   var data = gulp.src([
     'app/data/**/*'
   ]).pipe(gulp.dest(dist('data')));
@@ -198,7 +202,7 @@ gulp.task('copy', function() {
     'app/audio_images/**/*.{ogg,mp3}'
   ]).pipe(gulp.dest(dist('audio_images')));
 
-  return merge(app, bower, audios, projects, data)
+  return merge(app, bower, audios, projects, data, pdf)
     .pipe($.size({
       title: 'copy'
     }));

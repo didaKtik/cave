@@ -18511,6 +18511,14 @@ module.exports = Array.isArray || function (arr) {
         color: var(--link-hover-color);
       }
 
+      paper-button {
+        color: white;
+        background: var(--accent-color);
+        font-weight: 700;
+        text-transform: none;
+        margin: 10px 0 0 0;
+      }
+
       hr {
         margin: 0;
         border-width: 2px 0 0 0;
@@ -18909,6 +18917,7 @@ module.exports = Array.isArray || function (arr) {
 </script>
 <iron-iconset-svg name="my" size="24">
 <svg><defs>
+  <g id="file-download"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path></g>
   <g id="menu"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></g>
   <g id="play-arrow"><path d="M8 5v14l11-7z"></path></g>
   <g id="stop"><path d="M6 6h12v12H6z"></path></g>
@@ -19085,7 +19094,7 @@ module.exports = Array.isArray || function (arr) {
 
       ul {
         padding-left: 10px;
-        margin-top: 5px;
+        margin: 5px 0 0 0;
       }
 
       .back-content hr {
@@ -19104,9 +19113,9 @@ module.exports = Array.isArray || function (arr) {
       }
 
       .back-content paper-button {
-        color: white;
-        font-weight: 700;
-        text-transform: none;
+        /*color: white;
+        font-weight: 700;*/
+        /*text-transform: none;*/
       }
 
       .back-content .title {
@@ -19140,10 +19149,10 @@ module.exports = Array.isArray || function (arr) {
                 </ul>
                 <div class="buttons-container">
                   <a target="_blank" href="[[item.gitHubUrl]]">
-                    <paper-button raised="" class="primary-b">GitHub <iron-icon src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" alt="octocat" title="octocat"></iron-icon></paper-button>
+                    <paper-button raised="" noink="" class="primary-b">GitHub <iron-icon src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" alt="octocat" title="octocat"></iron-icon></paper-button>
                   </a>
                   <a target="_blank" href="[[item.projectUrl]]" hidden="[[!item.projectUrl]]">
-                    <paper-button raised="" class="accent-b">Project <iron-icon icon="my:open-in-new"></iron-icon></paper-button>
+                    <paper-button raised="" noink="" class="accent-b">Project <iron-icon icon="my:open-in-new"></iron-icon></paper-button>
                   </a>
                 </div>
                 <hr>

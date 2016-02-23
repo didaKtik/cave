@@ -61,7 +61,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       ul {
         padding-left: 10px;
-        margin-top: 5px;
+        margin: 5px 0 0 0;
       }
 
       .back-content hr {
@@ -80,9 +80,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .back-content paper-button {
-        color: white;
-        font-weight: 700;
-        text-transform: none;
+        /*color: white;
+        font-weight: 700;*/
+        /*text-transform: none;*/
       }
 
       .back-content .title {
@@ -116,10 +116,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </ul>
                 <div class="buttons-container">
                   <a target="_blank" href="[[item.gitHubUrl]]">
-                    <paper-button raised class="primary-b">GitHub <iron-icon src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" alt="octocat" title="octocat"></iron-icon></paper-button>
+                    <paper-button raised noink class="primary-b">GitHub <iron-icon src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" alt="octocat" title="octocat"></iron-icon></paper-button>
                   </a>
                   <a target="_blank" href="[[item.projectUrl]]" hidden="[[!item.projectUrl]]">
-                    <paper-button raised class="accent-b">Project <iron-icon icon="my:open-in-new"></iron-icon></paper-button>
+                    <paper-button raised noink class="accent-b">Project <iron-icon icon="my:open-in-new"></iron-icon></paper-button>
                   </a>
                 </div>
                 <hr>
