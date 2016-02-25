@@ -5,11 +5,12 @@
 <!-- The id defines the name of the module -->
 <dom-module id="shared-styles">
   <template>
-    <style>
+    <style is="custom-style">
       paper-menu a > *, paper-menu paper-item > *, paper-menu paper-icon-item > * {
         pointer-events: none;
       }
 
+      /* Element styling */
       a {
         color: inherit;
       }

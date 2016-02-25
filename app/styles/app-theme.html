@@ -10,6 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <!-- This is not a style module, you can't include it wherever you want, it applies to the whole doc -->
 <!-- But still it has to be imported in elements.html and included in index.html... Looks a lot like a style module -->
@@ -66,29 +67,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     /* Links colors */
     --link-hover-color: var(--accent-color);
 
-    /* Font styles */
-    --paper-font-title: {
-      @apply(--paper-font-common-base);
-      font-size: 20px;
-      font-weight: 500;
-    };
-
-    --paper-font-subhead: {
-      @apply(--paper-font-common-base);
-      font-size: 16px;
-      font-weight: 500;
-    };
-
-    --paper-font-sm-title: {
-      @apply(--paper-font-common-base);
-      font-size: 16px;
-      font-weight: 500;
-    };
-
-    --paper-font-sm-subhead: {
-      @apply(--paper-font-common-base);
-      font-size: 14px;
-      font-weight: 500;
+    /* Font */
+    --paper-font-common-base: {
+      font-family: 'Roboto', 'Noto', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     };
   }
 
@@ -137,6 +120,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   paper-menu a paper-item {
     width: 50%;
+    --paper-item: {
+      font-weight: 500;
+    };
   }
 
   paper-menu a iron-image {
@@ -188,16 +174,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     margin: 0 5px;
   }
 
-  paper-toolbar .greeting {
-    @apply(--paper-font-headline);
+  h1 {
+    @apply(--paper-font-common-base);
     font-size: 22px;
     font-weight: 500;
     color: var(--dark-primary-color);
-    padding: 0 0 10px 0;
+    letter-spacing: -.012em;
+    margin: 0.55em 0;
   }
 
-  paper-toolbar .subtitle {
-    @apply(--paper-font-subhead);
+  h2 {
+    @apply(--paper-font-common-base);
+    font-size: 15px;
+    font-weight: 500;
     color: var(--secondary-text-color);
   }
 
@@ -222,12 +211,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   /* Small mobile */
   @media (max-width: 360px) {
-    paper-toolbar .greeting {
-      @apply(--paper-font-sm-title);
+    h1 {
+      font-size: 18px;
     }
 
-    paper-toolbar .subtitle {
-      @apply(--paper-font-sm-subhead);
+    h2 {
+      /*@apply(--font-sm-subhead);*/
+      font-size: 14px;
     }
   }
 
@@ -239,8 +229,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       margin: 0 auto;
     }
 
-    paper-toolbar .greeting {
+    h1 {
       font-size: 26px;
+    }
+
+    h2 {
+      font-size: 16px;
     }
 
     /* Toolbar */

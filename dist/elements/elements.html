@@ -18285,29 +18285,11 @@ module.exports = Array.isArray || function (arr) {
     /* Links colors */
     --link-hover-color: var(--accent-color);
 
-    /* Font styles */
-    --paper-font-title: {
-      @apply(--paper-font-common-base);
-      font-size: 20px;
-      font-weight: 500;
-    };
-
-    --paper-font-subhead: {
-      @apply(--paper-font-common-base);
-      font-size: 16px;
-      font-weight: 500;
-    };
-
-    --paper-font-sm-title: {
-      @apply(--paper-font-common-base);
-      font-size: 16px;
-      font-weight: 500;
-    };
-
-    --paper-font-sm-subhead: {
-      @apply(--paper-font-common-base);
-      font-size: 14px;
-      font-weight: 500;
+    /* Font */
+    --paper-font-common-base: {
+      font-family: 'Roboto', 'Noto', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     };
   }
 
@@ -18356,6 +18338,9 @@ module.exports = Array.isArray || function (arr) {
 
   paper-menu a paper-item {
     width: 50%;
+    --paper-item: {
+      font-weight: 500;
+    };
   }
 
   paper-menu a iron-image {
@@ -18407,16 +18392,19 @@ module.exports = Array.isArray || function (arr) {
     margin: 0 5px;
   }
 
-  paper-toolbar .greeting {
-    @apply(--paper-font-headline);
+  h1 {
+    @apply(--paper-font-common-base);
     font-size: 22px;
     font-weight: 500;
     color: var(--dark-primary-color);
-    padding: 0 0 10px 0;
+    letter-spacing: -.012em;
+    margin: 0.55em 0;
   }
 
-  paper-toolbar .subtitle {
-    @apply(--paper-font-subhead);
+  h2 {
+    @apply(--paper-font-common-base);
+    font-size: 15px;
+    font-weight: 500;
     color: var(--secondary-text-color);
   }
 
@@ -18441,12 +18429,13 @@ module.exports = Array.isArray || function (arr) {
 
   /* Small mobile */
   @media (max-width: 360px) {
-    paper-toolbar .greeting {
-      @apply(--paper-font-sm-title);
+    h1 {
+      font-size: 18px;
     }
 
-    paper-toolbar .subtitle {
-      @apply(--paper-font-sm-subhead);
+    h2 {
+      /*@apply(--font-sm-subhead);*/
+      font-size: 14px;
     }
   }
 
@@ -18458,8 +18447,12 @@ module.exports = Array.isArray || function (arr) {
       margin: 0 auto;
     }
 
-    paper-toolbar .greeting {
+    h1 {
       font-size: 26px;
+    }
+
+    h2 {
+      font-size: 16px;
     }
 
     /* Toolbar */
@@ -18498,11 +18491,12 @@ module.exports = Array.isArray || function (arr) {
 
 <dom-module id="shared-styles" assetpath="../styles/">
   <template>
-    <style>
+    <style is="custom-style">
       paper-menu a > *, paper-menu paper-item > *, paper-menu paper-icon-item > * {
         pointer-events: none;
       }
 
+      /* Element styling */
       a {
         color: inherit;
       }
@@ -18585,6 +18579,7 @@ module.exports = Array.isArray || function (arr) {
       /* mobile */
       :host {  
         display: block;
+        @apply(--paper-font-common-base);
         box-sizing: border-box;
         border-radius: 10px;
         height: 100%;
@@ -18593,6 +18588,9 @@ module.exports = Array.isArray || function (arr) {
         margin: 16px auto;
         color: var(--primary-text-color);
         background: var(--tertiary-background-color);
+
+        font-size: 14px;
+        line-height: 20px;
       }
 
       /* IE 10 support for HTML5 hidden attr */
@@ -18600,14 +18598,14 @@ module.exports = Array.isArray || function (arr) {
         display: none !important;
       }
 
-      .image-container {
+      #image-container {
         position: relative;
         width: 50%;
         float: left;
         margin: 0 10px 0 0;
       }
 
-      .image-container iron-image {
+      #image-container iron-image {
         --iron-image-width: 100%;
         --iron-image-placeholder: {
           background-color: var(--primary-color, white);
@@ -18617,18 +18615,18 @@ module.exports = Array.isArray || function (arr) {
         @apply(--my-card-image);
       }
 
-      .image-container a {
+      #image-container a {
         position: absolute;
         @apply(--layout-fit);
         @apply(--layout-horizontal);
         @apply(--layout-center-center);
       }
 
-      .image-container paper-material {
+      #image-container paper-material {
         border-radius: 5px;
       }
       
-      .image-container iron-icon {
+      #image-container iron-icon {
         color: var(--image-icon-color);
         --iron-icon-width: 30px;
         --iron-icon-height: 30px;
@@ -18638,34 +18636,32 @@ module.exports = Array.isArray || function (arr) {
         @apply(--my-card-icon);
       }
 
-      .image-container iron-icon:hover {
+      #image-container iron-icon:hover {
         color: var(--link-hover-color);
       }
 
       #title {
-        @apply(--paper-font-subhead);
-        margin: 0 0 10px 0;
+        font-size: 16px;
+        font-weight: 500;
         text-align: center;
+        margin: 0 0 0.8em 0;
       }
 
-      #theRest {
-        @apply(--paper-font-body1);
-        -moz-osx-font-smoothing: grayscale;
-        line-height: 18px;
+      :host > ::content p {
+        font-size: 14px;
+        line-height: 1.3;
         text-align: justify;
-
-        @apply(--my-card-theRest);
       }
 
       /* mobile-small */
       @media all and (min-width: 0) and (max-width: 360px) and (orientation: portrait) {
-        .image-container {
-          width: 100%;
-          margin: 0 0 10px 0;
+        :host {
+          padding: 12px 16px;
         }
 
-        #title {
-          margin: 10px 0;
+        #image-container {
+          width: 100%;
+          margin: 0 0 10px 0;
         }
       }
 
@@ -18676,24 +18672,28 @@ module.exports = Array.isArray || function (arr) {
           padding: 16px 30px;
           margin: 16px auto;
           margin-bottom: 32px;
+
+          font-weight: 500;
+          line-height: 1.5;
         }
 
-        .image-container {
+        #image-container {
           width: 33%;
           margin: 0 15px 0 0;
         }
 
         #title {
-          @apply(--paper-font-title);
+          font-size: 20px;
         }
 
-        #theRest {
-          @apply(--paper-font-body2);
+        :host > ::content p {
+          font-weight: 500;
+          line-height: 1.5;
         }
       }
     </style>
 
-    <div class="image-container">
+    <div id="image-container">
       <iron-image hidden$="[[!image]]" src="[[image]]" preload="" fade=""></iron-image>
       <a href="[[link]]" target="_blank" hidden="[[!link]]">
         <paper-material elevation="1">
@@ -18701,13 +18701,12 @@ module.exports = Array.isArray || function (arr) {
         </paper-material>
       </a>
     </div>
-    <div id="theRest">
-      <div id="title">
-        <content select=".title"></content>
-      </div>
-      <content select=":not(.title)"></content>
+    <div id="title">
+      <content select=".title"></content>
     </div>
-    <div style="clear: both;"></div>
+    <content select="p"></content>
+    <content></content>
+    
   </template>
 
   <script>

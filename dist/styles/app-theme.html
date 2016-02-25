@@ -1,4 +1,4 @@
-<link rel="import" href="../bower_components/polymer/polymer.html"><link rel="import" href="../bower_components/paper-styles/typography.html"><style is="custom-style">
+<link rel="import" href="../bower_components/polymer/polymer.html"><link rel="import" href="../bower_components/paper-styles/typography.html"><link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html"><style is="custom-style">
 
   /*
    Polymer includes a shim for CSS Custom Properties that we can use for application theming.
@@ -51,29 +51,11 @@
     /* Links colors */
     --link-hover-color: var(--accent-color);
 
-    /* Font styles */
-    --paper-font-title: {
-      @apply(--paper-font-common-base);
-      font-size: 20px;
-      font-weight: 500;
-    };
-
-    --paper-font-subhead: {
-      @apply(--paper-font-common-base);
-      font-size: 16px;
-      font-weight: 500;
-    };
-
-    --paper-font-sm-title: {
-      @apply(--paper-font-common-base);
-      font-size: 16px;
-      font-weight: 500;
-    };
-
-    --paper-font-sm-subhead: {
-      @apply(--paper-font-common-base);
-      font-size: 14px;
-      font-weight: 500;
+    /* Font */
+    --paper-font-common-base: {
+      font-family: 'Roboto', 'Noto', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     };
   }
 
@@ -122,6 +104,9 @@
 
   paper-menu a paper-item {
     width: 50%;
+    --paper-item: {
+      font-weight: 500;
+    };
   }
 
   paper-menu a iron-image {
@@ -173,16 +158,19 @@
     margin: 0 5px;
   }
 
-  paper-toolbar .greeting {
-    @apply(--paper-font-headline);
+  h1 {
+    @apply(--paper-font-common-base);
     font-size: 22px;
     font-weight: 500;
     color: var(--dark-primary-color);
-    padding: 0 0 10px 0;
+    letter-spacing: -.012em;
+    margin: 0.55em 0;
   }
 
-  paper-toolbar .subtitle {
-    @apply(--paper-font-subhead);
+  h2 {
+    @apply(--paper-font-common-base);
+    font-size: 15px;
+    font-weight: 500;
     color: var(--secondary-text-color);
   }
 
@@ -207,12 +195,13 @@
 
   /* Small mobile */
   @media (max-width: 360px) {
-    paper-toolbar .greeting {
-      @apply(--paper-font-sm-title);
+    h1 {
+      font-size: 18px;
     }
 
-    paper-toolbar .subtitle {
-      @apply(--paper-font-sm-subhead);
+    h2 {
+      /*@apply(--font-sm-subhead);*/
+      font-size: 14px;
     }
   }
 
@@ -224,8 +213,12 @@
       margin: 0 auto;
     }
 
-    paper-toolbar .greeting {
+    h1 {
       font-size: 26px;
+    }
+
+    h2 {
+      font-size: 16px;
     }
 
     /* Toolbar */
