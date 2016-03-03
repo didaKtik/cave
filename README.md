@@ -16,7 +16,7 @@ Shadow DOM makes it hard at the start to understand how elements are styled. Ele
 Styling in Polymer still has limitations however. As in many browsers don't have a Shadow DOM, it is polyfilled in Polymer with Shady DOM, in a way that for performance reasons doesn't perfectly mimic the Shadow DOM specification. For example in a few non-unusual situations style changes are not automatically applied and have to be triggered manually. This is the case for example if you want to redefine custom css properties at different screen sizes based on media queries. DOM manipulations also have to occur through a dedicated API so that shady DOM understands what's happening.
 
 #### Performance
-elements.html, the file where all the web components are "vulcanized" (merged), is more than 500kB in size in my case. Optimizations can certainly be done, but by default it is something you have to pay attention to when building a Polymer project.
+elements.html, the file where all the web components are "vulcanized" (merged), weighs around 150kB in my case. Optimizations can certainly be done, but by default it is something you have to pay attention to when building a Polymer project. Also bootstraping takes time on mobile devices, it has to be measured why but it may be due to the web components polyfill also.
 
 #### Routing
 An external library has to be used for routing.
